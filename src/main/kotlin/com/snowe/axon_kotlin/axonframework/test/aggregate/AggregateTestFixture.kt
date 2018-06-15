@@ -11,7 +11,7 @@ import org.hamcrest.Matchers.hasProperty
 inline fun <reified T> AggregateTestFixture() = org.axonframework.test.aggregate.AggregateTestFixture(T::class.java)
 inline fun <reified T> AggregateTestFixture<*>.registerCommandHandler(commandHandler: MessageHandler<CommandMessage<*>>) = this.registerCommandHandler(T::class.java, commandHandler)
 inline fun <reified T> AggregateTestFixture<*>.registerIgnoredField(fieldName: String) = this.registerIgnoredField(T::class.java, fieldName)
-fun TestExecutor.whenever(command: Any) = this.`when`(command)
+fun TestExecutor.whenever(command: Any): ResultValidator = this.`when`(command)
 
 /**
  * Expect Exception with a reified class and a provided Exception message
