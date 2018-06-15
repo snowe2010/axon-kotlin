@@ -1,7 +1,10 @@
-package com.snowe.axon_kotlin.axonframework.test.aggregate
+package com.snowe.axon_kotlin.axonframework.test.aggregate.dsl
 
+import com.snowe.axon_kotlin.axonframework.test.aggregate.whenever
+import org.axonframework.eventhandling.EventMessage
 import org.axonframework.messaging.MetaData
 import org.axonframework.test.aggregate.AggregateTestFixture
+import org.hamcrest.Matcher
 import kotlin.collections.ArrayList
 
 
@@ -26,16 +29,11 @@ operator fun <T> AggregateTestFixture<T>.invoke(init: AggregateTestFixtureBuilde
  *   }
  * ```
  */
-class AggregateTestFixtureBuilder<T> {
-    val aggregateTestFixture: AggregateTestFixture<T>
+class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: AggregateTestFixture<T>) {
     var wheneverCommand: Any? = null
     var wheneverMetaData: Map<String, *> = MetaData.emptyInstance()
     private var expectsBuilder: ExpectsBuilder = ExpectsBuilder()
     private var givenBuilder: GivenBuilder = GivenBuilder()
-
-    constructor(aggregateTestFixture: AggregateTestFixture<T>) {
-        this.aggregateTestFixture = aggregateTestFixture
-    }
 
     fun given(block: GivenBuilder.() -> Unit) = givenBuilder.apply(block)
 
@@ -62,7 +60,8 @@ class AggregateTestFixtureBuilder<T> {
         val testExecutor = aggregateTestFixture.given(givenBuilder.givenEvents).andGivenCommands(givenBuilder.givenCommands)
         val resultValidator = testExecutor.whenever(wheneverCommand!!)
 
-        resultValidator.expectEvents(*expects.events.toTypedArray())
+        expects.events?.let { resultValidator.expectEvents(*it.toTypedArray()) }
+        expects.eventsMatching?.let { resultValidator.expectEventsMatching(it) }
     }
 }
 
@@ -70,11 +69,11 @@ data class GivenBuilder(val givenEvents: ArrayList<Any> = arrayListOf(),
                         val givenCommands: ArrayList<Any> = arrayListOf()) {
 
     fun events(vararg event: Any) {
-        event.filterNotNull().forEach { givenEvents.add(it) }
+        event.forEach { givenEvents.add(it) }
     }
 
     fun commands(vararg command: Any) {
-        command.filterNotNull().forEach { givenCommands.add(it) }
+        command.forEach { givenCommands.add(it) }
     }
 }
 
@@ -82,5 +81,6 @@ data class GivenBuilder(val givenEvents: ArrayList<Any> = arrayListOf(),
 class ExpectsBuilder {
     var returnValue: Any? = null
     var noEvents: Boolean? = null
-    lateinit var events: List<Any>
+    var events: List<Any>? = null
+    var eventsMatching: Matcher<out MutableList<in EventMessage<*>>>? = null
 }
