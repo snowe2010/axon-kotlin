@@ -10,6 +10,7 @@ import com.snowe.axon_kotlin.events.FooIncrementedEvent
 import org.axonframework.commandhandling.CommandBus
 import org.axonframework.commandhandling.CommandHandler
 import org.axonframework.commandhandling.CommandMessage
+import org.axonframework.commandhandling.TargetAggregateIdentifier
 import org.axonframework.commandhandling.gateway.CommandGateway
 import org.axonframework.commandhandling.gateway.DefaultCommandGateway
 import org.axonframework.commandhandling.model.AggregateIdentifier
@@ -22,6 +23,8 @@ import org.axonframework.eventhandling.saga.SagaEventHandler
 import org.axonframework.eventsourcing.DomainEventMessage
 import org.axonframework.eventsourcing.EventSourcingHandler
 import org.axonframework.messaging.MessageHandler
+import org.axonframework.test.aggregate.ResultValidator
+import org.axonframework.test.aggregate.TestExecutor
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.io.Serializable
@@ -53,24 +56,44 @@ class AggregateTestFixtureTest {
         val fixtureConfiguration = fixture.registerIgnoredField<StubAnnotatedAggregate>("ignoredField")
         Assertions.assertNotNull(fixtureConfiguration)
     }
-}
 
-@AggregateRoot
-data class StubAnnotatedAggregate(@field:AggregateIdentifier val identifier: UUID, val ignoredField: String) {
-    fun doSomething() {
-        apply(StubDomainEvent())
-    }
-}
 
-class StubDomainEvent : Serializable {
-    override fun toString(): String {
-        return "StubDomainEvent"
+    @Test
+    fun `Overridden whenever forwards command properly`() {
+        val fixture = AggregateTestFixture<StubAnnotatedAggregate>()
+        val id = UUID.randomUUID()
+        fixture.givenNoPriorActivity()
+                .whenever(StubDomainCommand(id))
+                .expectEvents(StubDomainEvent(id))
     }
 
-    companion object {
-        private const val serialVersionUID = 834667054977749990L
+    @Test
+    fun `Expect exception by class`() {
+        val fixture = AggregateTestFixture<StubAnnotatedAggregate>()
+        val id = UUID.randomUUID()
+        fixture.givenCommands(StubDomainCommand(id))
+                .whenever(ThrowExceptionCommand(id))
+                .expectException<RuntimeException>()
     }
+
+    @Test
+    fun `Expect exception by class with message`() {
+        val fixture = AggregateTestFixture<StubAnnotatedAggregate>()
+        val id = UUID.randomUUID()
+        fixture.givenCommands(StubDomainCommand(id))
+                .whenever(ThrowExceptionCommand(id))
+                .expectException<RuntimeException>("with a message")
+    }
+
+    @Test
+    fun `Expect exception still allows chaining`() {
+        val fixture = AggregateTestFixture<StubAnnotatedAggregate>()
+        val id = UUID.randomUUID()
+        fixture.givenCommands(StubDomainCommand(id))
+                .whenever(ThrowExceptionCommand(id))
+                .expectException<RuntimeException>()
+                .expectException<RuntimeException>("with a message")
+                .expectException(RuntimeException::class.java)
+    }
+
 }
-
-
-
