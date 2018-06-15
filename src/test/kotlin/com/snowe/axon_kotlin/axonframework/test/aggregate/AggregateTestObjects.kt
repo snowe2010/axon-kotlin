@@ -6,7 +6,6 @@ import org.axonframework.commandhandling.model.AggregateIdentifier
 import org.axonframework.commandhandling.model.AggregateLifecycle
 import org.axonframework.commandhandling.model.AggregateRoot
 import org.axonframework.eventsourcing.EventSourcingHandler
-import java.io.Serializable
 import java.util.*
 
 
@@ -16,8 +15,13 @@ class StubAnnotatedAggregate() {
     val ignoredField: String = ""
 
     @CommandHandler
-    constructor(command: StubDomainCommand): this() {
-        AggregateLifecycle.apply(StubDomainEvent(command.id))
+    constructor(command: CreateAggregateCommand): this() {
+        AggregateLifecycle.apply(AggregateCreatedEvent(command.id))
+    }
+
+    @CommandHandler
+    fun handle(command: StubCommand) {
+        AggregateLifecycle.apply(StubEvent(command.id))
     }
 
     @CommandHandler
@@ -26,12 +30,17 @@ class StubAnnotatedAggregate() {
     }
 
     @EventSourcingHandler
-    fun on(event: StubDomainEvent) {
+    fun on(event: AggregateCreatedEvent) {
         identifier = event.id
     }
+
+    @EventSourcingHandler
+    fun on(event: StubEvent) {}
 }
 
-data class StubDomainEvent(val id: UUID)
+data class AggregateCreatedEvent(val id: UUID)
+data class StubEvent(val id: UUID)
 
-data class StubDomainCommand(@TargetAggregateIdentifier val id: UUID)
+data class CreateAggregateCommand(@TargetAggregateIdentifier val id: UUID)
+data class StubCommand(@TargetAggregateIdentifier val id: UUID)
 data class ThrowExceptionCommand(@TargetAggregateIdentifier val id: UUID)
