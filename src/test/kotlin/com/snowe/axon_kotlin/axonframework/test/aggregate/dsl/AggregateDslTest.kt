@@ -1,5 +1,7 @@
-package com.snowe.axon_kotlin.axonframework.test.aggregate
+package com.snowe.axon_kotlin.axonframework.test.aggregate.dsl
 
+import com.snowe.axon_kotlin.axonframework.test.aggregate.*
+import org.axonframework.eventhandling.EventMessage
 import org.axonframework.test.AxonAssertionError
 import org.hamcrest.BaseMatcher
 import org.hamcrest.Description
@@ -106,20 +108,5 @@ class AggregateDslTest {
         assertTrue(exception.message!!.contains("The published events do not match the expected events"))
     }
 
-    
 }
 
-
-private class DoesMatch<T> : BaseMatcher<T>() {
-    override fun matches(o: Any) = true
-    override fun describeTo(description: Description) {
-        description.appendText("DoesMatch matches")
-    }
-}
-
-private class DoesNotMatch<T> : BaseMatcher<T>() {
-    override fun matches(o: Any) = false
-    override fun describeTo(description: Description) {
-        description.appendText("DoesNotMatch doesn't match")
-    }
-}
