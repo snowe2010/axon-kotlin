@@ -55,8 +55,8 @@ class AggregateDslTest {
         val id = UUID.randomUUID()
         fixture {
             given {
-                events(AggregateCreatedEvent(id))
-                commands(StubCommand(id))
+                events{+AggregateCreatedEvent(id)}
+                commands{+StubCommand(id)}
             }
             whenever {
                 StubCommand(id)
@@ -74,8 +74,8 @@ class AggregateDslTest {
         val id = UUID.randomUUID()
         fixture {
             given {
-                events(AggregateCreatedEvent(id))
-                commands(StubCommand(id))
+                events{+AggregateCreatedEvent(id)}
+                commands{+StubCommand(id)}
             }
             whenever {
                 StubCommand(id)
@@ -94,8 +94,8 @@ class AggregateDslTest {
         val exception = assertFailsWith<AxonAssertionError> {
             fixture {
                 given {
-                    events(AggregateCreatedEvent(id))
-                    commands(StubCommand(id))
+                    events{+AggregateCreatedEvent(id)}
+                    commands{+StubCommand(id)}
                 }
                 whenever {
                     StubCommand(id)
