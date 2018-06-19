@@ -1,0 +1,95 @@
+apply plugin: 'signing'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven'
+apply plugin: 'nebula.provided-base'
+
+//group 'com.tylerthrailkill'
+//archivesBaseName 'axon-kotlin'
+//version '1.0.0-SNAPSHOT'
+//version = rootProject.ext.versionName
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from 'build/javadoc'
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+artifacts {
+    archives jar
+
+    archives javadocJar
+    archives sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+install {
+    repositories.mavenInstaller {
+        pom.project {
+            name 'Axon-Kotlin'
+            packaging 'jar'
+            description 'Kotlin extensions for Axon.'
+            url 'https://github.com/snowe2010/axon-kotlin'
+
+            scm {
+                url 'scm:git@github.com:snowe2010/axon-kotlin.git'
+                connection 'scm:git@github.com:snowe2010/axon-kotlin.git'
+                developerConnection 'scm:git@github.com:snowe2010/axon-kotlin.git'
+            }
+
+            licenses {
+                license {
+                    name 'MIT'
+                    url 'https://opensource.org/licenses/MIT'
+                    distribution 'repo'
+                }
+            }
+
+            developers {
+                developer {
+                    id 'snowe2010'
+                    name 'Tyler Thrailkill'
+                }
+            }
+        }
+    }
+}
+
+bintray {
+    println(hasProperty('bintrayUsername'))
+    println(bintrayUsername)
+    user = bintrayUsername ? bintrayUsername : System.getenv('BINTRAY_USER')
+    key = bintrayApiKey ? bintrayApiKey : System.getenv('BINTRAY_KEY')
+
+    configurations = ['archives']
+
+    publish = true
+
+    pkg {
+        repo = 'maven'
+        name = 'Axon-Kotlin'
+        licenses = ['MIT']
+        vcsUrl = 'https://github.com/snowe2010/axon-kotlin.git'
+
+        version {
+            name = '1.0.0'
+
+            gpg {
+                sign = true
+            }
+
+            mavenCentralSync {
+                sync = true
+                user = hasProperty('sonatypeUsername') ? sonatypeUsername : System.getenv('SONATYPE_USERNAME')
+                password = hasProperty('sonatypePassword') ? sonatypePassword : System.getenv('SONATYPE_PASSWORD')
+                close = '1'
+            }
+        }
+    }
+}
