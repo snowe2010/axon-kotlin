@@ -1,4 +1,4 @@
-package com.snowe.axon_kotlin.axonframework.test.aggregate.dsl
+package com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl
 
 import org.axonframework.commandhandling.CommandHandler
 import org.axonframework.commandhandling.model.AggregateIdentifier

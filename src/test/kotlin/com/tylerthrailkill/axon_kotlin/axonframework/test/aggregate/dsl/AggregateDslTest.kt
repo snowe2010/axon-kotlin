@@ -1,12 +1,12 @@
-package com.snowe.axon_kotlin.axonframework.test.aggregate.dsl
+package com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl
 
-import com.snowe.axon_kotlin.axonframework.test.aggregate.*
+import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.*
 import org.axonframework.test.AxonAssertionError
 import org.junit.jupiter.api.Test
 import java.util.*
 import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
-import com.snowe.axon_kotlin.axonframework.test.aggregate.CreateAggregateCommand
+import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.CreateAggregateCommand
 /**
  * @author Tyler Thrailkill
  */

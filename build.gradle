@@ -3,7 +3,7 @@ plugins {
     id "org.jetbrains.kotlin.plugin.noarg" version "1.2.50"
 }
 
-group 'com.snowe'
+group 'com.tylerthrailkill'
 version '1.0-SNAPSHOT'
 
 repositories {

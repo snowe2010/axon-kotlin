@@ -1,7 +1,7 @@
-package com.snowe.axon_kotlin.axonframework.test.aggregate.dsl
+package com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl
 
-import com.snowe.axon_kotlin.axonframework.test.aggregate.AggregateTestFixture
-import com.snowe.axon_kotlin.axonframework.test.aggregate.whenever
+import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.AggregateTestFixture
+import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.whenever
 import org.axonframework.eventsourcing.GenericDomainEventMessage
 import org.axonframework.eventsourcing.eventstore.EventStoreException
 import org.axonframework.messaging.unitofwork.CurrentUnitOfWork

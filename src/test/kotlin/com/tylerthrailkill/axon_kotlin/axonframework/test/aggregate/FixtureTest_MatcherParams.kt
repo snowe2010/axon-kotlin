@@ -1,9 +1,9 @@
-package com.snowe.axon_kotlin.axonframework.test.aggregate
+package com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate
 
 import com.nhaarman.mockito_kotlin.argumentCaptor
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
-import com.snowe.axon_kotlin.axonframework.test.aggregate.dsl.*
+import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.*
 import org.axonframework.commandhandling.CommandMessage
 import org.axonframework.eventhandling.EventMessage
 import org.axonframework.messaging.MessageHandler
@@ -152,7 +152,7 @@ class FixtureTest_MatcherParams {
             fail("Expected an AxonAssertionError")
         } catch (e: AxonAssertionError) {
             assertTrue(e.message!!.contains("The published events do not match the expected events"))
-            assertTrue(e.message!!.contains("com.snowe.axon_kotlin.axonframework.test.aggregate.dsl.DoesMatch <|> "))
+            assertTrue(e.message!!.contains("com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.DoesMatch <|> "))
             assertTrue(e.message!!.contains("probable cause"))
         }
 

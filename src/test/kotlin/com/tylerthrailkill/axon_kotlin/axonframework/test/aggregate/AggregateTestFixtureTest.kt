@@ -1,4 +1,4 @@
-package com.snowe.axon_kotlin.axonframework.test.aggregate
+package com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate
 
 import com.nhaarman.mockito_kotlin.mock
 import org.axonframework.commandhandling.CommandHandler

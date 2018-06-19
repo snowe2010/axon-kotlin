@@ -1,7 +1,6 @@
-package com.snowe.axon_kotlin.axonframework.test.aggregate.dsl
+package com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl
 
-import com.snowe.axon_kotlin.axonframework.test.aggregate.whenever
-import org.axonframework.commandhandling.CommandHandler
+import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.whenever
 import org.axonframework.commandhandling.CommandMessage
 import org.axonframework.eventhandling.EventMessage
 import org.axonframework.eventsourcing.AggregateFactory

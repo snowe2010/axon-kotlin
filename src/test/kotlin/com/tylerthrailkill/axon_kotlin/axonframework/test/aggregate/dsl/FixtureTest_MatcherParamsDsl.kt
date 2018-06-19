@@ -1,12 +1,9 @@
-package com.snowe.axon_kotlin.axonframework.test.aggregate.dsl
+package com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl
 
 import com.nhaarman.mockito_kotlin.argumentCaptor
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
-import com.snowe.axon_kotlin.axonframework.test.aggregate.AggregateTestFixture
-import com.snowe.axon_kotlin.axonframework.test.aggregate.dsl.*
-import com.snowe.axon_kotlin.axonframework.test.aggregate.whenever
-import com.snowe.axon_kotlin.axonframework.test.aggregate.*
+import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.AggregateTestFixture
 import org.axonframework.commandhandling.CommandMessage
 import org.axonframework.eventhandling.EventMessage
 import org.axonframework.messaging.MessageHandler
@@ -15,7 +12,6 @@ import org.axonframework.test.aggregate.FixtureConfiguration
 import org.axonframework.test.matchers.Matchers.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import kotlin.test.fail
@@ -227,7 +223,7 @@ class FixtureTest_MatcherParamsDsl {
             fail("Expected an AxonAssertionError")
         } catch (e: AxonAssertionError) {
             assertTrue(e.message!!.contains("The published events do not match the expected events"))
-            assertTrue(e.message!!.contains("com.snowe.axon_kotlin.axonframework.test.aggregate.dsl.DoesMatch <|> "))
+            assertTrue(e.message!!.contains("com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.DoesMatch <|> "))
             assertTrue(e.message!!.contains("probable cause"))
         }
     }

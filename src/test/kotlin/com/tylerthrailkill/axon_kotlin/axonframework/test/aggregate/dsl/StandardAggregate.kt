@@ -1,6 +1,6 @@
-package com.snowe.axon_kotlin.axonframework.test.aggregate.dsl
+package com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl
 
-import com.snowe.axon_kotlin.axonframework.test.aggregate.CreateAggregateCommand
+import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.CreateAggregateCommand
 import org.axonframework.commandhandling.CommandHandler
 import org.axonframework.commandhandling.TargetAggregateIdentifier
 import org.axonframework.commandhandling.model.AggregateIdentifier
@@ -11,13 +11,11 @@ import org.axonframework.eventsourcing.EventSourcingHandler
 import java.util.*
 
 import org.axonframework.commandhandling.model.AggregateLifecycle.apply
-import org.axonframework.commandhandling.model.AggregateLifecycle.markDeleted
 import org.axonframework.commandhandling.model.Repository
 import org.axonframework.eventhandling.EventBus
 import org.axonframework.eventhandling.GenericEventMessage
 import org.hamcrest.BaseMatcher
 import org.hamcrest.Description
-import java.util.function.Consumer
 
 
 /**
