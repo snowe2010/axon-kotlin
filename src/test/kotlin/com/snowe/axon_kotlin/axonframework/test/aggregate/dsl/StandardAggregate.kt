@@ -108,7 +108,7 @@ internal class MyEntity {
 }
 
 
-internal class MyEvent(val aggregateIdentifier: Any, val someValue: Int?, val someBytes: ByteArray = byteArrayOf())
+internal class MyEvent(val aggregateIdentifier: Any?, val someValue: Int?, val someBytes: ByteArray = byteArrayOf())
 internal class MyAggregateDeletedEvent(val isWithIllegalStateChange: Boolean)
 
 
