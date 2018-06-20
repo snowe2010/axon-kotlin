@@ -5,9 +5,12 @@ import org.axonframework.commandhandling.CommandMessage
 import org.axonframework.eventhandling.EventMessage
 import org.axonframework.eventsourcing.AggregateFactory
 import org.axonframework.eventsourcing.EventSourcingRepository
+import org.axonframework.messaging.MessageDispatchInterceptor
 import org.axonframework.messaging.MessageHandler
 import org.axonframework.messaging.MetaData
 import org.axonframework.test.aggregate.FixtureConfiguration
+import org.axonframework.test.aggregate.ResultValidator
+import org.axonframework.test.aggregate.TestExecutor
 import org.hamcrest.Matcher
 
 
@@ -58,7 +61,7 @@ class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfigurat
 
     fun expect(block: ExpectsBuilder.() -> Unit) = expectsBuilder.apply(block)
 
-    fun build() {
+    fun build(): ResultValidator {
         requireNotNull(wheneverCommand)
         requireNotNull(expectsBuilder)
         val expects = expectsBuilder
@@ -67,26 +70,39 @@ class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfigurat
         executorBuilder = registerBuilder.aggregateFactory?.let { aggregateTestFixture.registerAggregateFactory(it) } ?: executorBuilder
         executorBuilder = registerBuilder.annotatedCommandHandler?.let { aggregateTestFixture.registerAnnotatedCommandHandler(it) }
                 ?: executorBuilder
+        registerBuilder.commandDispatchInterceptorBuilder.list.forEach {
+            aggregateTestFixture.registerCommandDispatchInterceptor(it)
+        }
         registerBuilder.commandHandlers.forEach {
             executorBuilder.registerCommandHandler(it.key, it.value)
         }
-        val testExecutor = executorBuilder
-                .given(givenBuilder.eventsBuilder.list)
-                .andGivenCommands(givenBuilder.commandsBuilder.list)
+        val eventsBuilderList = givenBuilder.eventsBuilder.list
+        val commandsBuilderList = givenBuilder.commandsBuilder.list
+        var testExecutor: TestExecutor = if (eventsBuilderList.isNotEmpty() && commandsBuilderList.isEmpty()) {
+            executorBuilder.given(eventsBuilderList)
+        } else if (eventsBuilderList.isEmpty() && commandsBuilderList.isNotEmpty() )  {
+            executorBuilder.givenCommands(commandsBuilderList)
+        }  else if (eventsBuilderList.isNotEmpty() && commandsBuilderList.isNotEmpty()) {
+            executorBuilder.given(eventsBuilderList).andGivenCommands(commandsBuilderList)
+        } else {
+            throw RuntimeException()
+        }
+
         var resultValidator = testExecutor.whenever(wheneverCommand!!, wheneverMetaData)
         resultValidator = expects.events?.let { resultValidator.expectEvents(*it.toTypedArray()) } ?: resultValidator
         resultValidator = expects.eventsMatching?.let { resultValidator.expectEventsMatching(it) } ?: resultValidator
         resultValidator = expects.returnValue?.let { resultValidator.expectReturnValue(it) } ?: resultValidator
         resultValidator = expects.returnValueMatching?.let { resultValidator.expectReturnValueMatching(it) } ?: resultValidator
         resultValidator = expects.exception?.let { resultValidator.expectException(it) } ?: resultValidator
-
+        return resultValidator
     }
 
     data class RegisterBuilder<T>(
             var repository: EventSourcingRepository<T>? = null,
             var aggregateFactory: AggregateFactory<T>? = null,
             var annotatedCommandHandler: Any? = null,
-            var commandHandlers: MutableMap<Class<*>, MessageHandler<CommandMessage<*>>> = mutableMapOf()
+            var commandHandlers: MutableMap<Class<*>, MessageHandler<CommandMessage<*>>> = mutableMapOf(),
+            var commandDispatchInterceptorBuilder: RegisterCommandDispatchInterceptorBuilder = RegisterCommandDispatchInterceptorBuilder()
     ) {
 
         inline fun <reified C> commandHandler(command: MessageHandler<CommandMessage<*>>) {
@@ -96,6 +112,17 @@ class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfigurat
         fun <C> addCommandHandler(payloadType: Class<C>, command: MessageHandler<CommandMessage<*>>) {
             commandHandlers[payloadType] = command
         }
+
+
+        class RegisterCommandDispatchInterceptorBuilder {
+            val list = mutableListOf<MessageDispatchInterceptor<CommandMessage<*>>>()
+            operator fun MessageDispatchInterceptor<CommandMessage<*>>.unaryPlus() {
+                list.add(this)
+            }
+        }
+
+        fun commandDispatchInterceptors(builder: RegisterCommandDispatchInterceptorBuilder.() -> Unit) =
+            commandDispatchInterceptorBuilder.apply(builder).list
     }
 
     data class ExpectsBuilder(

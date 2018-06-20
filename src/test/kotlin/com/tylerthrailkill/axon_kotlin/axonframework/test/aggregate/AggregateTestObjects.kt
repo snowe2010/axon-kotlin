@@ -44,3 +44,6 @@ data class StubEvent(val id: UUID)
 data class CreateAggregateCommand(@TargetAggregateIdentifier val id: UUID)
 data class StubCommand(@TargetAggregateIdentifier val id: UUID)
 data class ThrowExceptionCommand(@TargetAggregateIdentifier val id: UUID)
+
+
+internal data class TestEvent(val aggregateIdentifier: Any, val values: Map<String, Any>)
