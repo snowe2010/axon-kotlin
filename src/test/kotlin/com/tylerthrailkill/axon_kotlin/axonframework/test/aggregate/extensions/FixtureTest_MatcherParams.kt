@@ -1,9 +1,10 @@
-package com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate
+package com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.extensions
 
 import com.nhaarman.mockito_kotlin.argumentCaptor
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
-import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.*
+import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.AggregateTestFixture
+import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.whenever
 import org.axonframework.commandhandling.CommandMessage
 import org.axonframework.eventhandling.EventMessage
 import org.axonframework.messaging.MessageHandler

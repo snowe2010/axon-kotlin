@@ -106,6 +106,7 @@ internal class MyEntity {
 
 
 internal class MyEvent(val aggregateIdentifier: Any?, val someValue: Int?, val someBytes: ByteArray = byteArrayOf())
+internal class MyOtherEvent
 internal class MyAggregateDeletedEvent(val isWithIllegalStateChange: Boolean)
 
 
@@ -123,7 +124,14 @@ internal class StrangeCommandReceivedException(message: String) : RuntimeExcepti
 }
 
 
-internal class MyCommandHandler(var repository: Repository<StandardAggregate>, val eventBus: EventBus) {
+internal class MyCommandHandler() {
+    lateinit var repository: Repository<StandardAggregate>
+    lateinit var eventBus: EventBus
+
+    constructor(repository: Repository<StandardAggregate>, eventBus: EventBus) : this() {
+        this.repository = repository
+        this.eventBus = eventBus
+    }
 
 
     @CommandHandler
@@ -161,6 +169,7 @@ internal class MyCommandHandler(var repository: Repository<StandardAggregate>, v
         repository.load(command.aggregateIdentifier.toString()).execute { r -> r.delete(command.isAsIllegalChange) }
     }
 }
+
 
 
 internal class DoesMatch<T> : BaseMatcher<T>() {
