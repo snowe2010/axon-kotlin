@@ -197,7 +197,7 @@ class FixtureTest_RegularParams {
                     .expectEvents(MyEvent("aggregateId", 4), MyEvent("aggregateId", 5))
             fail("Expected an AxonAssertionError")
         } catch (e: AxonAssertionError) {
-            assertTrue(e.message!!.contains("org.axonframework.test.aggregate.MyEvent <|> "))
+            assertTrue(e.message!!.contains("com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.extensions.MyEvent <|> "))
         }
 
     }
@@ -214,7 +214,7 @@ class FixtureTest_RegularParams {
                     .expectEvents(MyOtherEvent())
             fail("Expected an AxonAssertionError")
         } catch (e: AxonAssertionError) {
-            assertTrue(e.message!!.contains("org.axonframework.test.aggregate.MyOtherEvent <|>" + " org.axonframework.test.aggregate.MyEvent"))
+            assertTrue(e.message!!.contains("com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.extensions.MyOtherEvent <|> com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.extensions.MyEvent"))
         }
 
     }
@@ -343,7 +343,7 @@ class FixtureTest_RegularParams {
             fail("Expected an AxonAssertionError")
         } catch (e: AxonAssertionError) {
             assertTrue(e.message!!.contains("The published events do not match the expected events"))
-            assertTrue(e.message!!.contains("org.axonframework.test.aggregate.MyEvent <|> "))
+            assertTrue(e.message!!.contains("com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.extensions.MyEvent <|> "))
             assertTrue(e.message!!.contains("probable cause"))
         }
 

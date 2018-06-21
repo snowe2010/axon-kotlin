@@ -153,7 +153,7 @@ class FixtureTest_MatcherParams {
             fail("Expected an AxonAssertionError")
         } catch (e: AxonAssertionError) {
             assertTrue(e.message!!.contains("The published events do not match the expected events"))
-            assertTrue(e.message!!.contains("com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.DoesMatch <|> "))
+            assertTrue(e.message!!.contains("com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.extensions.DoesMatch <|> "))
             assertTrue(e.message!!.contains("probable cause"))
         }
 

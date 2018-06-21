@@ -20,7 +20,7 @@ import org.hamcrest.Description
 /**
  * Heavily borrowed from AxonFramework will permission from Allard Buijze and Steven Van Beelen
  */
-internal class StandardAggregate() {
+internal class StandardAggregate {
 
     @Transient
     private var counter: Int = 0
@@ -29,11 +29,11 @@ internal class StandardAggregate() {
     private lateinit var identifier: String
     private var entity: MyEntity? = null
 
-    constructor(aggregateIdentifier: Any): this() {
+    constructor(aggregateIdentifier: Any) {
         identifier = aggregateIdentifier.toString()
     }
 
-    constructor(initialValue: Int, aggregateIdentifier: Any?): this() {
+    constructor(initialValue: Int, aggregateIdentifier: Any?) {
         apply(MyEvent(aggregateIdentifier ?: UUID.randomUUID(), initialValue))
     }
 
