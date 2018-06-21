@@ -78,6 +78,7 @@ class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfigurat
             aggregateTestFixture.registerCommandDispatchInterceptor(it)
         }
         registerBuilder.commandHandlers.forEach { aggregateTestFixture.registerCommandHandler(it.key, it.value) }
+        registerBuilder.injectableResourcesBuilder.list.forEach { aggregateTestFixture.registerInjectableResource(it) }
         return aggregateTestFixture
     }
 
@@ -103,25 +104,21 @@ class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfigurat
         expectsBuilder.returnValue?.let { resultValidator.expectReturnValue(it) }
         expectsBuilder.returnValueMatching?.let { resultValidator.expectReturnValueMatching(it) }
         expectsBuilder.exception?.let { resultValidator.expectException(it) }
+        expectsBuilder.successfulHandlerExecution?.let { resultValidator.expectSuccessfulHandlerExecution() }
         return resultValidator
     }
 
     data class RegisterBuilder<T>(
             var repository: EventSourcingRepository<T>? = null,
             var aggregateFactory: AggregateFactory<T>? = null,
-            var annotatedCommandHandler: Any? = null,
-            var commandHandlers: MutableMap<Class<*>, MessageHandler<CommandMessage<*>>> = mutableMapOf(),
-            var commandDispatchInterceptorBuilder: RegisterCommandDispatchInterceptorBuilder = RegisterCommandDispatchInterceptorBuilder()
+            var annotatedCommandHandler: Any? = null
     ) {
-
-        inline fun <reified C> commandHandler(command: MessageHandler<CommandMessage<*>>) {
-            addCommandHandler(C::class.java, command)
-        }
-
-        fun <C> addCommandHandler(payloadType: Class<C>, command: MessageHandler<CommandMessage<*>>) {
-            commandHandlers[payloadType] = command
-        }
-
+        var commandHandlers: MutableMap<Class<*>, MessageHandler<CommandMessage<*>>> = mutableMapOf()
+            private set
+        var injectableResourcesBuilder: AnyUnaryBuilder = AnyUnaryBuilder()
+            private set
+        var commandDispatchInterceptorBuilder: RegisterCommandDispatchInterceptorBuilder = RegisterCommandDispatchInterceptorBuilder()
+            private set
 
         class RegisterCommandDispatchInterceptorBuilder {
             val list = mutableListOf<MessageDispatchInterceptor<CommandMessage<*>>>()
@@ -130,8 +127,18 @@ class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfigurat
             }
         }
 
+        inline fun <reified C> commandHandler(handler: MessageHandler<CommandMessage<*>>) {
+            addCommandHandler(C::class.java, handler)
+        }
+
+        fun <C> addCommandHandler(payloadType: Class<C>, command: MessageHandler<CommandMessage<*>>) {
+            commandHandlers[payloadType] = command
+        }
+
         fun commandDispatchInterceptors(builder: RegisterCommandDispatchInterceptorBuilder.() -> Unit) =
             commandDispatchInterceptorBuilder.apply(builder).list
+
+        fun injectableResources(builder: AnyUnaryBuilder.() -> Unit) = injectableResourcesBuilder.apply(builder).list
     }
 
     data class ExpectsBuilder(
@@ -141,67 +148,51 @@ class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfigurat
             var eventsMatching: Matcher<out MutableList<in EventMessage<*>>>? = null,
             var exception: Matcher<*>? = null
     ) {
-        val eventsBuilder: ExpectEventsBuilder = ExpectEventsBuilder()
-        val commandsBuilder: ExpectCommandsBuilder = ExpectCommandsBuilder()
+        var successfulHandlerExecution: Boolean? = null
+            private set
+        val eventsBuilder: AnyUnaryBuilder = AnyUnaryBuilder()
+        val commandsBuilder: AnyUnaryBuilder = AnyUnaryBuilder()
 
         var commandsSet: Boolean = false
         var eventsSet: Boolean = false
 
-        class ExpectEventsBuilder {
-            val list = mutableListOf<Any>()
-            operator fun Any.unaryPlus() {
-                list.add(this)
-            }
-        }
-
-        class ExpectCommandsBuilder {
-            val list = mutableListOf<Any>()
-            operator fun Any.unaryPlus() {
-                list.add(this)
-            }
-        }
-
-        fun events(builder: ExpectEventsBuilder.() -> Unit) {
+        fun events(builder: AnyUnaryBuilder.() -> Unit) {
             eventsSet = true
             eventsBuilder.apply(builder).list
         }
 
-        fun commands(builder: ExpectCommandsBuilder.() -> Unit) {
+        fun commands(builder: AnyUnaryBuilder.() -> Unit) {
             commandsSet = true
             commandsBuilder.apply(builder).list
+        }
+
+        fun withSuccessfulHandlerExecution() {
+            successfulHandlerExecution = true
         }
     }
 
     class GivenBuilder {
-        val eventsBuilder: GivenEventsBuilder = GivenEventsBuilder()
-        val commandsBuilder: GivenCommandsBuilder = GivenCommandsBuilder()
+        val eventsBuilder: AggregateTestFixtureBuilder.AnyUnaryBuilder = AggregateTestFixtureBuilder.AnyUnaryBuilder()
+        val commandsBuilder: AggregateTestFixtureBuilder.AnyUnaryBuilder = AggregateTestFixtureBuilder.AnyUnaryBuilder()
         var commandsTrue: Boolean = false
         var eventsTrue: Boolean = false
 
-        class GivenEventsBuilder {
-            val list = mutableListOf<Any>()
-            operator fun Any.unaryPlus() {
-                list.add(this)
-            }
-        }
-
-        class GivenCommandsBuilder {
-            val list = mutableListOf<Any>()
-            operator fun Any.unaryPlus() {
-                list.add(this)
-            }
-        }
-
-        fun events(builder: GivenEventsBuilder.() -> Unit) {
+        fun events(builder: AggregateTestFixtureBuilder.AnyUnaryBuilder.() -> Unit) {
             eventsTrue = true
             eventsBuilder.apply(builder).list
         }
 
-        fun commands(builder: GivenCommandsBuilder.() -> Unit) {
+        fun commands(builder: AggregateTestFixtureBuilder.AnyUnaryBuilder.() -> Unit) {
             commandsTrue = true
             commandsBuilder.apply(builder).list
         }
     }
 
+    class AnyUnaryBuilder {
+        val list = mutableListOf<Any>()
+        operator fun Any.unaryPlus() {
+            list.add(this)
+        }
+    }
 }
 

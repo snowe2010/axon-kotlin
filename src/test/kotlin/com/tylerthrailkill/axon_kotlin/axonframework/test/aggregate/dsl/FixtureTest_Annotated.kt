@@ -4,6 +4,7 @@ import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.AggregateTes
 import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.whenever
 import org.axonframework.eventsourcing.GenericDomainEventMessage
 import org.axonframework.eventsourcing.eventstore.EventStoreException
+import org.axonframework.messaging.MessageHandler
 import org.axonframework.messaging.unitofwork.CurrentUnitOfWork
 import org.axonframework.test.AxonAssertionError
 import org.axonframework.test.FixtureExecutionException
@@ -38,10 +39,21 @@ class FixtureTest_Annotated {
     @Test
     fun testNullIdentifierIsRejected() {
         try {
-            fixture.given(MyEvent(null, 0))
-                    .whenever(TestCommand("test"))
-                    .expectEvents(MyEvent("test", 1))
-                    .expectSuccessfulHandlerExecution()
+            fixture {
+                given {
+                    events {
+                        +MyEvent(null, 0)
+                    }
+                    whenever {
+                        TestCommand("test")
+                    }
+                    expect {
+                        events { +MyEvent("test", 1) }
+                        withSuccessfulHandlerExecution()
+                    }
+                }
+
+            }
             fail("Expected test fixture to report failure")
         } catch (error: AxonAssertionError) {
             assertTrue(error.message!!.contains("IncompatibleAggregateException"), "Expected test to fail with IncompatibleAggregateException")
@@ -52,20 +64,32 @@ class FixtureTest_Annotated {
     @Test
     fun testAggregateCommandHandlersOverwrittenByCustomHandlers() {
         val invoked = AtomicBoolean(false)
-        fixture.registerCommandHandler(CreateAggregateCommand::class.java) {
-            invoked.set(true)
-            null
-        }
+        fixture {
+            register {
+                commandHandler<CreateAggregateCommand>(MessageHandler {
+                    invoked.set(true)
+                    null
+                })
 
-        fixture.given().whenever(CreateAggregateCommand()).expectEvents()
+                whenever { CreateAggregateCommand() }
+                expect {
+                    events { }
+                }
+            }
+        }
         assertTrue(invoked.get())
     }
 
     @Test
     fun testAggregateIdentifier_ServerGeneratedIdentifier() {
-        fixture.registerInjectableResource(HardToCreateResource())
-        fixture.given()
-                .whenever(CreateAggregateCommand())
+        fixture {
+            register {
+                injectableResources {
+                    +HardToCreateResource()
+                }
+                whenever { CreateAggregateCommand() }
+            }
+        }
     }
 
     @Test
