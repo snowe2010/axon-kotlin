@@ -23,7 +23,9 @@ class AggregateDslTest {
                 CreateAggregateCommand(id) to mapOf("HI" to "anything")
             }
             expect {
-                events = listOf(AggregateCreatedEvent(id))
+                events {
+                    +AggregateCreatedEvent(id)
+                }
             }
         }
     }
@@ -39,7 +41,9 @@ class AggregateDslTest {
                     CreateAggregateCommand(id) to mapOf("HI" to "anything")
                 }
                 expect {
-                    events = listOf(AggregateCreatedEvent(UUID.randomUUID()))
+                    events {
+                        +AggregateCreatedEvent(UUID.randomUUID())
+                    }
                 }
             }
         }
@@ -59,7 +63,9 @@ class AggregateDslTest {
                 StubCommand(id)
             }
             expect {
-                events = listOf(StubEvent(id))
+                events {
+                    +StubEvent(id)
+                }
             }
         }
     }

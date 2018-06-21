@@ -64,36 +64,45 @@ class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfigurat
     fun build(): ResultValidator {
         requireNotNull(wheneverCommand)
         requireNotNull(expectsBuilder)
-        val expects = expectsBuilder
-        var executorBuilder = aggregateTestFixture
-        executorBuilder = registerBuilder.repository?.let { aggregateTestFixture.registerRepository(it) } ?: executorBuilder
-        executorBuilder = registerBuilder.aggregateFactory?.let { aggregateTestFixture.registerAggregateFactory(it) } ?: executorBuilder
-        executorBuilder = registerBuilder.annotatedCommandHandler?.let { aggregateTestFixture.registerAnnotatedCommandHandler(it) }
-                ?: executorBuilder
+
+        buildFixtureConfiguration()
+        val testExecutor = buildTestExecutor()
+        return buildResultValidator(testExecutor)
+    }
+
+    private fun buildFixtureConfiguration(): FixtureConfiguration<T> {
+        registerBuilder.repository?.let { aggregateTestFixture.registerRepository(it) }
+        registerBuilder.aggregateFactory?.let { aggregateTestFixture.registerAggregateFactory(it) }
+        registerBuilder.annotatedCommandHandler?.let { aggregateTestFixture.registerAnnotatedCommandHandler(it) }
         registerBuilder.commandDispatchInterceptorBuilder.list.forEach {
             aggregateTestFixture.registerCommandDispatchInterceptor(it)
         }
-        registerBuilder.commandHandlers.forEach {
-            executorBuilder.registerCommandHandler(it.key, it.value)
-        }
+        registerBuilder.commandHandlers.forEach { aggregateTestFixture.registerCommandHandler(it.key, it.value) }
+        return aggregateTestFixture
+    }
+
+    private fun buildTestExecutor(): TestExecutor {
         val eventsBuilderList = givenBuilder.eventsBuilder.list
         val commandsBuilderList = givenBuilder.commandsBuilder.list
-        var testExecutor: TestExecutor = if (eventsBuilderList.isNotEmpty() && commandsBuilderList.isEmpty()) {
-            executorBuilder.given(eventsBuilderList)
+        val testExecutor = aggregateTestFixture.givenNoPriorActivity()
+        return if (eventsBuilderList.isNotEmpty() && commandsBuilderList.isEmpty()) {
+            testExecutor.andGiven(eventsBuilderList)
         } else if (eventsBuilderList.isEmpty() && commandsBuilderList.isNotEmpty() )  {
-            executorBuilder.givenCommands(commandsBuilderList)
+            testExecutor.andGivenCommands(commandsBuilderList)
         }  else if (eventsBuilderList.isNotEmpty() && commandsBuilderList.isNotEmpty()) {
-            executorBuilder.given(eventsBuilderList).andGivenCommands(commandsBuilderList)
+            testExecutor.andGiven(eventsBuilderList).andGivenCommands(commandsBuilderList)
         } else {
-            throw RuntimeException()
+            testExecutor
         }
+    }
 
-        var resultValidator = testExecutor.whenever(wheneverCommand!!, wheneverMetaData)
-        resultValidator = expects.events?.let { resultValidator.expectEvents(*it.toTypedArray()) } ?: resultValidator
-        resultValidator = expects.eventsMatching?.let { resultValidator.expectEventsMatching(it) } ?: resultValidator
-        resultValidator = expects.returnValue?.let { resultValidator.expectReturnValue(it) } ?: resultValidator
-        resultValidator = expects.returnValueMatching?.let { resultValidator.expectReturnValueMatching(it) } ?: resultValidator
-        resultValidator = expects.exception?.let { resultValidator.expectException(it) } ?: resultValidator
+    private fun buildResultValidator(testExecutor: TestExecutor): ResultValidator {
+        val resultValidator = testExecutor.whenever(wheneverCommand!!, wheneverMetaData)
+        if (expectsBuilder.eventsSet) expectsBuilder.eventsBuilder.list.let { resultValidator.expectEvents(*it.toTypedArray()) }
+        expectsBuilder.eventsMatching?.let { resultValidator.expectEventsMatching(it) }
+        expectsBuilder.returnValue?.let { resultValidator.expectReturnValue(it) }
+        expectsBuilder.returnValueMatching?.let { resultValidator.expectReturnValueMatching(it) }
+        expectsBuilder.exception?.let { resultValidator.expectException(it) }
         return resultValidator
     }
 
@@ -129,14 +138,45 @@ class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfigurat
             var returnValue: Any? = null,
             var returnValueMatching: Matcher<*>? = null,
             var noEvents: Boolean? = null,
-            var events: List<Any>? = null,
             var eventsMatching: Matcher<out MutableList<in EventMessage<*>>>? = null,
             var exception: Matcher<*>? = null
-    )
+    ) {
+        val eventsBuilder: ExpectEventsBuilder = ExpectEventsBuilder()
+        val commandsBuilder: ExpectCommandsBuilder = ExpectCommandsBuilder()
+
+        var commandsSet: Boolean = false
+        var eventsSet: Boolean = false
+
+        class ExpectEventsBuilder {
+            val list = mutableListOf<Any>()
+            operator fun Any.unaryPlus() {
+                list.add(this)
+            }
+        }
+
+        class ExpectCommandsBuilder {
+            val list = mutableListOf<Any>()
+            operator fun Any.unaryPlus() {
+                list.add(this)
+            }
+        }
+
+        fun events(builder: ExpectEventsBuilder.() -> Unit) {
+            eventsSet = true
+            eventsBuilder.apply(builder).list
+        }
+
+        fun commands(builder: ExpectCommandsBuilder.() -> Unit) {
+            commandsSet = true
+            commandsBuilder.apply(builder).list
+        }
+    }
 
     class GivenBuilder {
         val eventsBuilder: GivenEventsBuilder = GivenEventsBuilder()
         val commandsBuilder: GivenCommandsBuilder = GivenCommandsBuilder()
+        var commandsTrue: Boolean = false
+        var eventsTrue: Boolean = false
 
         class GivenEventsBuilder {
             val list = mutableListOf<Any>()
@@ -153,10 +193,12 @@ class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfigurat
         }
 
         fun events(builder: GivenEventsBuilder.() -> Unit) {
+            eventsTrue = true
             eventsBuilder.apply(builder).list
         }
 
         fun commands(builder: GivenCommandsBuilder.() -> Unit) {
+            commandsTrue = true
             commandsBuilder.apply(builder).list
         }
     }

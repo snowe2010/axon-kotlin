@@ -217,7 +217,9 @@ class FixtureTest_MatcherParamsDsl {
                 }
                 whenever { StrangeCommand("aggregateId") }
                 expect {
-                    events = listOf(DoesMatch<List<EventMessage<*>>>())
+                    events {
+                        +DoesMatch<List<EventMessage<*>>>()
+                    }
                 }
             }
             fail("Expected an AxonAssertionError")

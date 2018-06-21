@@ -103,7 +103,7 @@ class FixtureTest_CommandInterceptors {
     @Throws(Exception::class)
     fun testRegisteredCommandHandlerInterceptorsAreInvoked() {
         fixture.registerCommandHandlerInterceptor(TestCommandHandlerInterceptor())
-        whenever<Any>(mockCommandHandlerInterceptor.handle(any<UnitOfWork<CommandMessage<Any>>>(), any<InterceptorChain>()))
+        whenever(mockCommandHandlerInterceptor.handle(any<UnitOfWork<CommandMessage<Any>>>(), any<InterceptorChain>()))
                 .thenAnswer({ it.arguments })
         fixture.registerCommandHandlerInterceptor(mockCommandHandlerInterceptor)
 
@@ -120,7 +120,7 @@ class FixtureTest_CommandInterceptors {
         val unitOfWorkResult = unitOfWorkCaptor.firstValue
         val messageResult = unitOfWorkResult.message
         assertEquals(expectedCommand, messageResult.payload)
-        assertEquals(expectedMetaDataMap, messageResult.metaData as HashMap<String, Any>)
+        assertEquals(expectedMetaDataMap, messageResult.metaData as Map<String, Any>)
     }
 
     @Test
