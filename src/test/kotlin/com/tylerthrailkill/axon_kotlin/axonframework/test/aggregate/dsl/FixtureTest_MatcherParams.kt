@@ -20,7 +20,7 @@ import kotlin.test.fail
  * Heavily borrowed from AxonFramework will permission from Allard Buize and Steven Van Beelen
  *
  */
-class FixtureTest_MatcherParamsDsl {
+class FixtureTest_MatcherParams {
     private lateinit var fixture: FixtureConfiguration<StandardAggregate>
 
     @BeforeEach

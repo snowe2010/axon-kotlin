@@ -95,17 +95,26 @@ class FixtureTest_Annotated {
     @Test
     fun testUnavailableResourcesCausesFailure() {
         assertFailsWith<FixtureExecutionException> {
-            fixture.given()
-                    .whenever(CreateAggregateCommand())
+            fixture {
+                whenever { CreateAggregateCommand() }
+            }
         }
     }
 
     @Test
     fun testAggregateIdentifier_IdentifierAutomaticallyDeducted() {
-        fixture.given(MyEvent("AggregateId", 1), MyEvent("AggregateId", 2))
-                .whenever(TestCommand("AggregateId"))
-                .expectEvents(MyEvent("AggregateId", 3))
-
+        fixture {
+            given {
+                events {
+                    +MyEvent("AggregateId", 1)
+                    +MyEvent("AggregateId", 2)
+                }
+            }
+            whenever { TestCommand("AggregateId") }
+            expect {
+                events { +MyEvent("AggregateId", 3) }
+            }
+        }
         val events = fixture.eventStore.readEvents("AggregateId")
         for (t in 0..2) {
             assertTrue(events.hasNext())
@@ -118,19 +127,33 @@ class FixtureTest_Annotated {
     @Test
     fun testFixtureGivenCommands_ResourcesNotAvailable() {
         assertFailsWith<FixtureExecutionException> {
-            fixture.givenCommands(CreateAggregateCommand("aggregateId"))
+            fixture {
+                given {
+                    commands { +CreateAggregateCommand("aggregateId") }
+                }
+            }
         }
     }
 
     @Test
     fun testFixtureGivenCommands_ResourcesAvailable() {
-        fixture.registerInjectableResource(HardToCreateResource())
-        fixture.givenCommands(CreateAggregateCommand("aggregateId"),
-                TestCommand("aggregateId"),
-                TestCommand("aggregateId"),
-                TestCommand("aggregateId"))
-                .whenever(TestCommand("aggregateId"))
-                .expectEvents(MyEvent("aggregateId", 4))
+        fixture {
+            register {
+                injectableResources { +HardToCreateResource() }
+            }
+            given {
+                commands {
+                    +CreateAggregateCommand("aggregateId")
+                    +TestCommand("aggregateId")
+                    +TestCommand("aggregateId")
+                    +TestCommand("aggregateId")
+                }
+            }
+            whenever { TestCommand("aggregateId") }
+            expect {
+                events { +MyEvent("aggregateId", 4) }
+            }
+        }
     }
 
     @Test
@@ -165,16 +188,30 @@ class FixtureTest_Annotated {
 
     @Test
     fun testFixture_AggregateDeleted() {
-        fixture.given(MyEvent("aggregateId", 5))
-                .whenever(DeleteCommand("aggregateId", false))
-                .expectEvents(MyAggregateDeletedEvent(false))
+        fixture {
+            given {
+                events {
+                    +MyEvent("aggregateId", 5)
+                }
+            }
+            whenever { DeleteCommand("aggregateId", false) }
+            expect {
+                events { +MyAggregateDeletedEvent(false) }
+            }
+        }
     }
 
     @Test
     fun testFixtureDetectsStateChangeOutsideOfHandler_AggregateDeleted() {
-        val exec = fixture.given(MyEvent("aggregateId", 5))
         try {
-            exec.whenever(DeleteCommand("aggregateId", true))
+            fixture {
+                given {
+                    events {
+                        +MyEvent("aggregateId", 5)
+                    }
+                }
+                whenever { DeleteCommand("aggregateId", true) }
+            }
             fail("Fixture should have failed")
         } catch (error: AssertionError) {
             assertTrue(error.message!!.contains("considered deleted"), "Wrong message: " + error.message)
@@ -184,11 +221,25 @@ class FixtureTest_Annotated {
 
     @Test
     fun testAndGiven() {
-        fixture.registerInjectableResource(HardToCreateResource())
-        fixture.givenCommands(CreateAggregateCommand("aggregateId"))
-                .andGiven(MyEvent("aggregateId", 1))
-                .whenever(TestCommand("aggregateId"))
-                .expectEvents(MyEvent("aggregateId", 2))
+        fixture {
+            register {
+                injectableResources { +HardToCreateResource() }
+            }
+            given {
+                commands {
+                    +CreateAggregateCommand("aggregateId")
+                }
+                events {
+                    +MyEvent("aggregateId", 1)
+                }
+            }
+            whenever { TestCommand("aggregateId") }
+            expect {
+                events {
+                    +MyEvent("aggregateId", 2)
+                }
+            }
+        }
     }
 
     @Test
