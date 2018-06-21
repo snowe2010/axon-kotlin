@@ -70,39 +70,12 @@ class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfigurat
     private fun buildFixtureConfiguration(): FixtureConfiguration<T> {
         registerBuilder.repository?.let { aggregateTestFixture.registerRepository(it) }
         registerBuilder.aggregateFactory?.let { aggregateTestFixture.registerAggregateFactory(it) }
-        registerBuilder.annotatedCommandHandler?.let { aggregateTestFixture.registerAnnotatedCommandHandler(it) }
-        registerBuilder.commandDispatchInterceptorBuilder.list.forEach {
-            aggregateTestFixture.registerCommandDispatchInterceptor(it)
-        }
-        registerBuilder.commandHandlers.forEach { aggregateTestFixture.registerCommandHandler(it.key, it.value) }
-        registerBuilder.injectableResourcesBuilder.list.forEach { aggregateTestFixture.registerInjectableResource(it) }
         return aggregateTestFixture
     }
 
     private fun buildTestExecutor(): TestExecutor {
-        val eventsBuilderList = givenBuilder.eventsBuilder.list
-        val commandsBuilderList = givenBuilder.commandsBuilder.list
-        val testExecutor = aggregateTestFixture.givenNoPriorActivity()
-        return if (eventsBuilderList.isNotEmpty() && commandsBuilderList.isEmpty()) {
-            testExecutor.andGiven(eventsBuilderList)
-        } else if (eventsBuilderList.isEmpty() && commandsBuilderList.isNotEmpty() )  {
-            testExecutor.andGivenCommands(commandsBuilderList)
-        }  else if (eventsBuilderList.isNotEmpty() && commandsBuilderList.isNotEmpty()) {
-            testExecutor.andGiven(eventsBuilderList).andGivenCommands(commandsBuilderList)
-        } else {
-            testExecutor
-        }
-//                val testExecutor = aggregateTestFixture.givenNoPriorActivity()
-//        return if (eventsBuilderList.isNotEmpty() && commandsBuilderList.isEmpty()) {
-//            aggregateTestFixture.given(eventsBuilderList)
-//        } else if (eventsBuilderList.isEmpty() && commandsBuilderList.isNotEmpty()) {
-//            aggregateTestFixture.givenCommands(commandsBuilderList)
-//        } else if (eventsBuilderList.isNotEmpty() && commandsBuilderList.isNotEmpty()) {
-//            aggregateTestFixture.given(eventsBuilderList).andGivenCommands(commandsBuilderList)
-//        } else {
-//            aggregateTestFixture.givenNoPriorActivity()
-//        }
-
+        givenBuilder.initialize()
+        return givenBuilder.testExecutor
     }
 
     private fun buildResultValidator(testExecutor: TestExecutor): ResultValidator {
@@ -117,23 +90,22 @@ class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfigurat
     }
 
     data class RegisterBuilder<T>(
-            val aggregateTestFixture: FixtureConfiguration<T>,
-            var repository: EventSourcingRepository<T>? = null,
-            var annotatedCommandHandler: Any? = null
+            var aggregateTestFixture: FixtureConfiguration<T>,
+            var repository: EventSourcingRepository<T>? = null
     ) {
         /**
          * Aggregate factory has to be registered immediately else a repository might be set up before this is called
          */
         var aggregateFactory: AggregateFactory<T>? = null
             set(value) {
-                aggregateTestFixture.registerAggregateFactory(value)
+                aggregateTestFixture = aggregateTestFixture.registerAggregateFactory(value)
             }
-        var commandHandlers: MutableMap<Class<*>, MessageHandler<CommandMessage<*>>> = mutableMapOf()
-            private set
-        var injectableResourcesBuilder: AnyUnaryBuilder = AnyUnaryBuilder()
-            private set
-        var commandDispatchInterceptorBuilder: RegisterCommandDispatchInterceptorBuilder = RegisterCommandDispatchInterceptorBuilder()
-            private set
+        var annotatedCommandHandler: Any? = null
+            set(value) {
+                aggregateTestFixture = aggregateTestFixture.registerAnnotatedCommandHandler(value)
+            }
+        private var injectableResourcesBuilder: AnyUnaryBuilder = AnyUnaryBuilder()
+        private var commandDispatchInterceptorBuilder: RegisterCommandDispatchInterceptorBuilder = RegisterCommandDispatchInterceptorBuilder()
 
         class RegisterCommandDispatchInterceptorBuilder {
             val list = mutableListOf<MessageDispatchInterceptor<CommandMessage<*>>>()
@@ -142,35 +114,53 @@ class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfigurat
             }
         }
 
-        inline fun <reified C> commandHandler(handler: MessageHandler<CommandMessage<*>>) {
-            addCommandHandler(C::class.java, handler)
+        inline fun <reified C> commandHandler(commandHandler: MessageHandler<CommandMessage<*>>) {
+            aggregateTestFixture.registerCommandHandler(C::class.java, commandHandler)
         }
 
-        fun <C> addCommandHandler(payloadType: Class<C>, command: MessageHandler<CommandMessage<*>>) {
-            commandHandlers[payloadType] = command
+        fun commandHandler(commandName: String, commandHandler: MessageHandler<CommandMessage<*>>) {
+            aggregateTestFixture.registerCommandHandler(commandName, commandHandler)
         }
 
-        fun commandDispatchInterceptors(builder: RegisterCommandDispatchInterceptorBuilder.() -> Unit) =
-                commandDispatchInterceptorBuilder.apply(builder).list
+        fun commandDispatchInterceptors(builder: RegisterCommandDispatchInterceptorBuilder.() -> Unit) {
+            commandDispatchInterceptorBuilder.apply(builder).list.forEach {
+                aggregateTestFixture.registerCommandDispatchInterceptor(it)
+            }
+        }
 
-        fun injectableResources(builder: AnyUnaryBuilder.() -> Unit) = injectableResourcesBuilder.apply(builder).list
+        fun injectableResources(builder: AnyUnaryBuilder.() -> Unit) {
+            injectableResourcesBuilder.apply(builder).list.forEach {
+                aggregateTestFixture.registerInjectableResource(it)
+            }
+        }
 
     }
 
     class GivenBuilder<T>(val aggregateTestFixture: FixtureConfiguration<T>) {
         val eventsBuilder: AggregateTestFixtureBuilder.AnyUnaryBuilder = AggregateTestFixtureBuilder.AnyUnaryBuilder()
         val commandsBuilder: AggregateTestFixtureBuilder.AnyUnaryBuilder = AggregateTestFixtureBuilder.AnyUnaryBuilder()
-        var commandsTrue: Boolean = false
-        var eventsTrue: Boolean = false
+        lateinit var testExecutor: TestExecutor
+
+        fun initialize() {
+            if (!this::testExecutor.isInitialized)
+                testExecutor = aggregateTestFixture.givenNoPriorActivity()
+        }
 
         fun events(builder: AggregateTestFixtureBuilder.AnyUnaryBuilder.() -> Unit) {
-            eventsTrue = true
-            eventsBuilder.apply(builder).list
+            initialize()
+            val list = eventsBuilder.apply(builder).list
+            testExecutor.andGiven(list)
         }
 
         fun commands(builder: AggregateTestFixtureBuilder.AnyUnaryBuilder.() -> Unit) {
-            commandsTrue = true
-            commandsBuilder.apply(builder).list
+            initialize()
+            val list = commandsBuilder.apply(builder).list
+            testExecutor.andGivenCommands(list)
+        }
+
+        fun build() {
+            if (!this::testExecutor.isInitialized)
+                testExecutor = aggregateTestFixture.givenNoPriorActivity()
         }
     }
 
