@@ -15,7 +15,7 @@ import org.hamcrest.Matcher
 
 
 operator fun <T> FixtureConfiguration<T>.invoke(init: AggregateTestFixtureBuilder<T>.() -> Unit): FixtureConfiguration<T> {
-    val fixture = AggregateTestFixtureBuilder<T>(this)
+    val fixture = AggregateTestFixtureBuilder(this)
     fixture.init()
     fixture.build()
     return fixture.aggregateTestFixture

@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test
 import java.util.*
 import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
-import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.CreateAggregateCommand
 /**
  * @author Tyler Thrailkill
  */
@@ -20,7 +19,7 @@ class AggregateDslTest {
         val id = UUID.randomUUID()
         fixture {
             whenever {
-                CreateAggregateCommand(id) to mapOf("HI" to "anything")
+                CreateStubAggregateCommand(id) to mapOf("HI" to "anything")
             }
             expect {
                 events {
@@ -38,7 +37,7 @@ class AggregateDslTest {
         assertFailsWith<AxonAssertionError>("One of the events contained different values than expected") {
             fixture {
                 whenever {
-                    CreateAggregateCommand(id) to mapOf("HI" to "anything")
+                    CreateStubAggregateCommand(id) to mapOf("HI" to "anything")
                 }
                 expect {
                     events {

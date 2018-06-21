@@ -1,6 +1,5 @@
 package com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl
 
-import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.CreateAggregateCommand
 import org.axonframework.commandhandling.CommandHandler
 import org.axonframework.commandhandling.TargetAggregateIdentifier
 import org.axonframework.commandhandling.model.AggregateIdentifier
@@ -21,7 +20,7 @@ import org.hamcrest.Description
 /**
  * Heavily borrowed from AxonFramework will permission from Allard Buijze and Steven Van Beelen
  */
-internal class StandardAggregate {
+internal class StandardAggregate() {
 
     @Transient
     private var counter: Int = 0
@@ -30,11 +29,11 @@ internal class StandardAggregate {
     private lateinit var identifier: String
     private var entity: MyEntity? = null
 
-    constructor(aggregateIdentifier: Any) {
+    constructor(aggregateIdentifier: Any): this() {
         identifier = aggregateIdentifier.toString()
     }
 
-    constructor(initialValue: Int, aggregateIdentifier: Any?) {
+    constructor(initialValue: Int, aggregateIdentifier: Any?): this() {
         apply(MyEvent(aggregateIdentifier ?: UUID.randomUUID(), initialValue))
     }
 
@@ -130,7 +129,7 @@ internal class MyCommandHandler(var repository: Repository<StandardAggregate>, v
     @CommandHandler
     @Throws(Exception::class)
     fun createAggregate(command: CreateAggregateCommand) {
-        repository.newInstance { StandardAggregate(0, command.id) }
+        repository.newInstance { StandardAggregate(0, command.aggregateIdentifier) }
     }
 
     @CommandHandler

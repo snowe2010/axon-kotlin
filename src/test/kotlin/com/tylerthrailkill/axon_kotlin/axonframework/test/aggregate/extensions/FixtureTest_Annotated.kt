@@ -49,7 +49,7 @@ class FixtureTest_Annotated {
         }
 
     }
-
+/**
     @Test
     fun testAggregateCommandHandlersOverwrittenByCustomHandlers() {
         val invoked = AtomicBoolean(false)
@@ -60,7 +60,7 @@ class FixtureTest_Annotated {
         fixture.given().whenever(CreateAggregateCommand()).expectEvents()
         assertTrue(invoked.get())
     }
-
+*/
     @Test
     fun testAggregateIdentifier_ServerGeneratedIdentifier() {
         fixture.registerInjectableResource(HardToCreateResource())

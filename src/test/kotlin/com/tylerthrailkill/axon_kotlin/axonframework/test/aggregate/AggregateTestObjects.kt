@@ -1,5 +1,6 @@
 package com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate
 
+import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.extensions.CreateAggregateCommand
 import org.axonframework.commandhandling.CommandHandler
 import org.axonframework.commandhandling.TargetAggregateIdentifier
 import org.axonframework.commandhandling.model.AggregateIdentifier
@@ -15,7 +16,7 @@ class StubAnnotatedAggregate() {
     val ignoredField: String = ""
 
     @CommandHandler
-    constructor(command: CreateAggregateCommand): this() {
+    constructor(command: CreateStubAggregateCommand): this() {
         AggregateLifecycle.apply(AggregateCreatedEvent(command.id))
     }
 
@@ -41,7 +42,7 @@ class StubAnnotatedAggregate() {
 data class AggregateCreatedEvent(val id: UUID)
 data class StubEvent(val id: UUID)
 
-data class CreateAggregateCommand(@TargetAggregateIdentifier val id: UUID)
+data class CreateStubAggregateCommand(@TargetAggregateIdentifier val id: UUID)
 data class StubCommand(@TargetAggregateIdentifier val id: UUID)
 data class ThrowExceptionCommand(@TargetAggregateIdentifier val id: UUID)
 

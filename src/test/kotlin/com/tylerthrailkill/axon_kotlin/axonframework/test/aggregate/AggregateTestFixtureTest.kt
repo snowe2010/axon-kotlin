@@ -40,7 +40,7 @@ class AggregateTestFixtureTest {
         val fixture = AggregateTestFixture<StubAnnotatedAggregate>()
         val id = UUID.randomUUID()
         fixture.givenNoPriorActivity()
-                .whenever(CreateAggregateCommand(id))
+                .whenever(CreateStubAggregateCommand(id))
                 .expectEvents(AggregateCreatedEvent(id))
     }
 
@@ -48,7 +48,7 @@ class AggregateTestFixtureTest {
     fun `Expect exception by class`() {
         val fixture = AggregateTestFixture<StubAnnotatedAggregate>()
         val id = UUID.randomUUID()
-        fixture.givenCommands(CreateAggregateCommand(id))
+        fixture.givenCommands(CreateStubAggregateCommand(id))
                 .whenever(ThrowExceptionCommand(id))
                 .expectException<RuntimeException>()
     }
@@ -57,7 +57,7 @@ class AggregateTestFixtureTest {
     fun `Expect exception by class with message`() {
         val fixture = AggregateTestFixture<StubAnnotatedAggregate>()
         val id = UUID.randomUUID()
-        fixture.givenCommands(CreateAggregateCommand(id))
+        fixture.givenCommands(CreateStubAggregateCommand(id))
                 .whenever(ThrowExceptionCommand(id))
                 .expectException<RuntimeException>("with a message")
     }
@@ -66,7 +66,7 @@ class AggregateTestFixtureTest {
     fun `Expect exception still allows chaining`() {
         val fixture = AggregateTestFixture<StubAnnotatedAggregate>()
         val id = UUID.randomUUID()
-        fixture.givenCommands(CreateAggregateCommand(id))
+        fixture.givenCommands(CreateStubAggregateCommand(id))
                 .whenever(ThrowExceptionCommand(id))
                 .expectException<RuntimeException>()
                 .expectException<RuntimeException>("with a message")

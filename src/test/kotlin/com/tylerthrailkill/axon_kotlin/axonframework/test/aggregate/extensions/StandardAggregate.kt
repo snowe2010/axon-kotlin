@@ -1,6 +1,5 @@
 package com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.extensions
 
-import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.CreateAggregateCommand
 import org.axonframework.commandhandling.CommandHandler
 import org.axonframework.commandhandling.TargetAggregateIdentifier
 import org.axonframework.commandhandling.model.AggregateIdentifier
@@ -130,7 +129,7 @@ internal class MyCommandHandler(var repository: Repository<StandardAggregate>, v
     @CommandHandler
     @Throws(Exception::class)
     fun createAggregate(command: CreateAggregateCommand) {
-        repository.newInstance { StandardAggregate(0, command.id) }
+        repository.newInstance { StandardAggregate(0, command.aggregateIdentifier) }
     }
 
     @CommandHandler
