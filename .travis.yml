@@ -1,7 +1,7 @@
 language: java
 install: true
 before_install:
-- openssl aes-256-cbc -K $encrypted_2d73bda5dc40_key -iv $encrypted_2d73bda5dc40_iv
+- openssl aes-256-cbc -K $encrypted_d328b9e20119_key -iv $encrypted_d328b9e20119_iv
   -in keyring.gpg.enc -out keyring.gpg -d
 - chmod +x gradlew
 stages:
@@ -14,16 +14,10 @@ jobs:
   include:
   - stage: build
     script:
-    - gpg --import keyring.asc
-    - gpg --dearmor keyring.asc
     - "./gradlew build"
   - stage: snapshot
     script:
-    - gpg --import keyring.asc
-    - gpg --dearmor keyring.asc
     - "./gradlew artifactoryPublish -x test -Dbuild.number=$TRAVIS_BUILD_NUMBER"
   - stage: release
     script:
-    - gpg --import keyring.asc
-    - gpg --dearmor keyring.asc
     - "./gradlew bintrayUpload -x test -Drelease=true -Dbuild.number=$TRAVIS_BUILD_NUMBER"
