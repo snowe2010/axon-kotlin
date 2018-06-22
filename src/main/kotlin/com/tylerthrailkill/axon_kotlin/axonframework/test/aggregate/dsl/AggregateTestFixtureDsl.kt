@@ -62,15 +62,8 @@ class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfigurat
     fun expect(block: ExpectsBuilder<T>.() -> Unit) = expectsBuilder.apply(block)
 
     fun build(): ResultValidator {
-        buildFixtureConfiguration()
         val testExecutor = buildTestExecutor()
         return buildResultValidator(testExecutor)
-    }
-
-    private fun buildFixtureConfiguration(): FixtureConfiguration<T> {
-        registerBuilder.repository?.let { aggregateTestFixture.registerRepository(it) }
-        registerBuilder.aggregateFactory?.let { aggregateTestFixture.registerAggregateFactory(it) }
-        return aggregateTestFixture
     }
 
     private fun buildTestExecutor(): TestExecutor {
@@ -90,9 +83,12 @@ class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfigurat
     }
 
     data class RegisterBuilder<T>(
-            var aggregateTestFixture: FixtureConfiguration<T>,
-            var repository: EventSourcingRepository<T>? = null
+            var aggregateTestFixture: FixtureConfiguration<T>
     ) {
+        var repository: EventSourcingRepository<T>? = null
+            set(value) {
+                aggregateTestFixture = aggregateTestFixture.registerRepository(repository)
+            }
         /**
          * Aggregate factory has to be registered immediately else a repository might be set up before this is called
          */
@@ -137,8 +133,6 @@ class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfigurat
     }
 
     class GivenBuilder<T>(val aggregateTestFixture: FixtureConfiguration<T>) {
-        val eventsBuilder: AggregateTestFixtureBuilder.AnyUnaryBuilder = AggregateTestFixtureBuilder.AnyUnaryBuilder()
-        val commandsBuilder: AggregateTestFixtureBuilder.AnyUnaryBuilder = AggregateTestFixtureBuilder.AnyUnaryBuilder()
         lateinit var testExecutor: TestExecutor
 
         fun initialize() {
@@ -148,13 +142,13 @@ class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfigurat
 
         fun events(builder: AggregateTestFixtureBuilder.AnyUnaryBuilder.() -> Unit) {
             initialize()
-            val list = eventsBuilder.apply(builder).list
+            val list = AggregateTestFixtureBuilder.AnyUnaryBuilder().apply(builder).list
             testExecutor.andGiven(list)
         }
 
         fun commands(builder: AggregateTestFixtureBuilder.AnyUnaryBuilder.() -> Unit) {
             initialize()
-            val list = commandsBuilder.apply(builder).list
+            val list = AggregateTestFixtureBuilder.AnyUnaryBuilder().apply(builder).list
             testExecutor.andGivenCommands(list)
         }
 

@@ -244,6 +244,16 @@ class FixtureTest_Annotated {
 
     @Test
     fun testAndGivenCommands() {
+        fixture {
+            given {
+                events { +MyEvent("aggregateId", 1) }
+                commands { +TestCommand("aggregateId") }
+            }
+            whenever { TestCommand("aggregateId") }
+            expect {
+                events { +MyEvent("aggregateId", 3) }
+            }
+        }
         fixture.given(MyEvent("aggregateId", 1))
                 .andGivenCommands(TestCommand("aggregateId"))
                 .whenever(TestCommand("aggregateId"))
@@ -252,11 +262,22 @@ class FixtureTest_Annotated {
 
     @Test
     fun testMultipleAndGivenCommands() {
-        fixture.given(MyEvent("aggregateId", 1))
-                .andGivenCommands(TestCommand("aggregateId"))
-                .andGivenCommands(TestCommand("aggregateId"))
-                .whenever(TestCommand("aggregateId"))
-                .expectEvents(MyEvent("aggregateId", 4))
+        fixture {
+            given {
+                events { +MyEvent("aggregateId", 1) }
+                commands { +TestCommand("aggregateId") }
+                commands { +TestCommand("aggregateId") }
+            }
+            whenever { TestCommand("aggregateId") }
+            expect {
+                events { +MyEvent("aggregateId", 4) }
+            }
+        }
+//        fixture.given(MyEvent("aggregateId", 1))
+//                .andGivenCommands(TestCommand("aggregateId"))
+//                .andGivenCommands(TestCommand("aggregateId"))
+//                .whenever(TestCommand("aggregateId"))
+//                .expectEvents(MyEvent("aggregateId", 4))
     }
 
     private inner class StubDomainEvent
