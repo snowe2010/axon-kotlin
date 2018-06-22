@@ -2,7 +2,9 @@ language: java
 install: true
 
 before_install:
- - chmod +x gradlew
+- openssl aes-256-cbc -K $encrypted_2d73bda5dc40_key -iv $encrypted_2d73bda5dc40_iv
+  -in keyring.asc.enc -out keyring.asc -d
+- chmod +x gradlew
 
 stages:
   - name: build
@@ -11,12 +13,11 @@ stages:
   - name: release
     if: branch = master
 
-
 jobs:
   include:
-    - stage: build
-      script: ./gradlew build
-    - stage: snapshot
-      script: ./gradlew artifactoryPublish -x test -Dbuild.number=$TRAVIS_BUILD_NUMBER
-    - stage: release
-      script: ./gradlew bintrayUpload -x test -Drelease=true -Dbuild.number=$TRAVIS_BUILD_NUMBER
+  - stage: build
+    script: "./gradlew build"
+  - stage: snapshot
+    script: "./gradlew artifactoryPublish -x test -Dbuild.number=$TRAVIS_BUILD_NUMBER"
+  - stage: release
+    script: "./gradlew bintrayUpload -x test -Drelease=true -Dbuild.number=$TRAVIS_BUILD_NUMBER"
