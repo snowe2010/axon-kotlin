@@ -17,7 +17,7 @@ repositories {
     mavenCentral()
     mavenLocal()
 }
-axonVersion = '3.3-SNAPSHOT'
+def axonVersion = '3.2.2'
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.2.41"

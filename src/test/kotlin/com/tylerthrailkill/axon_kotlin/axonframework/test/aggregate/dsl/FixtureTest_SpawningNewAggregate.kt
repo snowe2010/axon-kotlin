@@ -1,32 +1,12 @@
 package com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl
 
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
-import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.whenever
-import org.axonframework.commandhandling.CommandHandler
-import org.axonframework.commandhandling.model.AggregateIdentifier
-import org.axonframework.commandhandling.model.AggregateLifecycle.apply
-import org.axonframework.commandhandling.model.AggregateLifecycle.createNew
-import org.axonframework.commandhandling.model.Repository
-import org.axonframework.commandhandling.model.RepositoryProvider
-import org.axonframework.commandhandling.model.inspection.AnnotatedAggregateMetaModelFactory
-import org.axonframework.eventsourcing.EventSourcedAggregate
-import org.axonframework.eventsourcing.EventSourcingHandler
-import org.axonframework.test.aggregate.AggregateTestFixture
-import org.axonframework.test.aggregate.FixtureConfiguration
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import java.util.*
-import java.util.concurrent.Callable
-
 
 /**
  * Fixture tests for spawning new aggregate functionality.
  *
  * @author Milan Savic
  */
+/*
 class FixtureTest_SpawningNewAggregate {
 
     private lateinit var fixture: FixtureConfiguration<Aggregate1>
@@ -118,3 +98,4 @@ class FixtureTest_SpawningNewAggregate {
         }
     }
 }
+*/
