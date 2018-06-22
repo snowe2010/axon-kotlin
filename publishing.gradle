@@ -34,13 +34,13 @@ gradle.taskGraph.whenReady { taskGraph ->
 }
 
 signing {
-    sign publishing.publications.mavenPublication
+    sign publishing.publications.mavenKotlin
 }
 
 
 publishing {
     publications {
-        mavenPublication(MavenPublication) {
+        mavenKotlin(MavenPublication) {
             from components.java
             artifact javadocJar
             artifact sourcesJar
@@ -108,7 +108,7 @@ bintray {
     key = findProperty('bintrayApiKey') ?: System.getenv('BINTRAY_KEY')
 
 //    configurations = ['archives']
-    publications = ['mavenPublication']
+    publications = ['mavenKotlin']
 
     publish = true
 
@@ -144,7 +144,7 @@ artifactory {
             password = project.findProperty('bintrayApiKey') ?: System.getenv('BINTRAY_KEY')
         }
         defaults {
-            publications('mavenPublication')
+            publications('mavenKotlin')
             publishArtifacts = true
             publishPom = true
         }
