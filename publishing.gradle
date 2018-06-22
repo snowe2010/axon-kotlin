@@ -33,11 +33,6 @@ gradle.taskGraph.whenReady { taskGraph ->
     }
 }
 
-signing {
-    sign publishing.publications.mavenKotlin
-}
-
-
 publishing {
     publications {
         mavenKotlin(MavenPublication) {
@@ -69,6 +64,10 @@ publishing {
             }
         }
     }
+}
+
+signing {
+    sign publishing.publications.mavenKotlin
 }
 
 install {
