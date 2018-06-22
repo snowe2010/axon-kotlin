@@ -2,7 +2,7 @@ language: java
 install: true
 
 before_install:
-- openssl aes-256-cbc -K $encrypted_2d73bda5dc40_key -iv $encrypted_2d73bda5dc40_iv
+- openssl aes-256-cbc -K $encrypted_d328b9e20119_key -iv $encrypted_d328b9e20119_iv
   -in keyring.asc.enc -out keyring.asc -d
 - chmod +x gradlew
 
