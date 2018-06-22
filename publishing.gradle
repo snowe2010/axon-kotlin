@@ -107,8 +107,8 @@ bintray {
     user = findProperty('bintrayUsername') ?: System.getenv('BINTRAY_USER')
     key = findProperty('bintrayApiKey') ?: System.getenv('BINTRAY_KEY')
 
-//    configurations = ['archives']
-    publications = ['mavenPublication']
+    configurations = ['archives']
+//    publications = ['mavenPublication']
 
     publish = true
 
