@@ -16,9 +16,13 @@ stages:
 jobs:
   include:
   - stage: build
-    script: "./gradlew build"
+    script:
+    - "gpg --import keyring.asc"
+    - "./gradlew build"
   - stage: snapshot
-    script: "./gradlew artifactoryPublish -x test -Dbuild.number=$TRAVIS_BUILD_NUMBER"
+    script:
+    - "gpg --import keyring.asc"
+    - "./gradlew artifactoryPublish -x test -Dbuild.number=$TRAVIS_BUILD_NUMBER"
   - stage: release
     script:
     - "gpg --import keyring.asc"
