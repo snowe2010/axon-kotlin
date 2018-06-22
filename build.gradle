@@ -2,6 +2,7 @@ plugins {
     id "org.jetbrains.kotlin.jvm" version "1.2.41"
     id "org.jetbrains.kotlin.plugin.noarg" version "1.2.50"
     id "com.jfrog.bintray" version "1.8.2"
+    id "com.jfrog.artifactory" version "4.7.4"
     id 'nebula.provided-base' version '3.0.3' // if you want provided-base
 }
 
@@ -10,7 +11,7 @@ apply plugin: 'signing'
 apply from: 'publishing.gradle'
 
 group 'com.tylerthrailkill'
-version '1.0.0'
+version = gradle.version
 
 repositories {
     mavenCentral()

@@ -1,12 +1,9 @@
 apply plugin: 'signing'
 apply plugin: 'com.jfrog.bintray'
-apply plugin: 'maven'
+apply plugin: 'com.jfrog.artifactory'
+//apply plugin: 'maven'
+apply plugin: 'maven-publish'
 apply plugin: 'nebula.provided-base'
-
-//group 'com.tylerthrailkill'
-//archivesBaseName 'axon-kotlin'
-//version '1.0.0-SNAPSHOT'
-//version = rootProject.ext.versionName
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
@@ -27,6 +24,40 @@ artifacts {
 
 signing {
     sign configurations.archives
+}
+
+
+publishing {
+    publications {
+        mavenPublication(MavenPublication) {
+            from components.java
+            artifact javadocJar
+            artifact sourcesJar
+            pom {
+                scm {
+                    url = 'scm:git@github.com:snowe2010/axon-kotlin.git'
+                    connection = 'scm:git@github.com:snowe2010/axon-kotlin.git'
+                    developerConnection = 'scm:git@github.com:snowe2010/axon-kotlin.git'
+                }
+
+                licenses {
+                    license {
+                        name = 'MIT'
+                        url = 'https://opensource.org/licenses/MIT'
+                        distribution = 'repo'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'snowe2010'
+                        name = 'Tyler Thrailkill'
+                        email = 'tyler.b.thrailkill@gmail.com'
+                    }
+                }
+            }
+        }
+    }
 }
 
 install {
@@ -62,12 +93,11 @@ install {
 }
 
 bintray {
-    println(hasProperty('bintrayUsername'))
-    println(bintrayUsername)
-    user = bintrayUsername ? bintrayUsername : System.getenv('BINTRAY_USER')
-    key = bintrayApiKey ? bintrayApiKey : System.getenv('BINTRAY_KEY')
+    user = findProperty('bintrayUsername') ?: System.getenv('BINTRAY_USER')
+    key = findProperty('bintrayApiKey') ?: System.getenv('BINTRAY_KEY')
 
-    configurations = ['archives']
+//    configurations = ['archives']
+    publications = ['mavenPublication']
 
     publish = true
 
@@ -78,7 +108,7 @@ bintray {
         vcsUrl = 'https://github.com/snowe2010/axon-kotlin.git'
 
         version {
-            name = '1.0.0'
+            name = gradle.version
 
             gpg {
                 sign = true
@@ -86,10 +116,30 @@ bintray {
 
             mavenCentralSync {
                 sync = true
-                user = hasProperty('sonatypeUsername') ? sonatypeUsername : System.getenv('SONATYPE_USERNAME')
-                password = hasProperty('sonatypePassword') ? sonatypePassword : System.getenv('SONATYPE_PASSWORD')
+                user = project.findProperty('sonatypeUsername') ?: System.getenv('SONATYPE_USERNAME')
+                password = project.findProperty('sonatypePassword') ?: System.getenv('SONATYPE_PASSWORD')
                 close = '1'
             }
         }
     }
+}
+
+artifactory {
+    contextUrl = 'http://oss.jfrog.org'
+    publish {
+        repository {
+            repoKey = 'oss-snapshot-local'
+            username = project.findProperty('bintrayUsername') ?: System.getenv('BINTRAY_USER')
+            password = project.findProperty('bintrayApiKey') ?: System.getenv('BINTRAY_KEY')
+        }
+        defaults {
+            publications('mavenPublication')
+            publishArtifacts = true
+            publishPom = true
+        }
+    }
+    resolve {
+        repoKey = 'jcenter'
+    }
+    clientConfig.info.setBuildNumber('' + new Random(System.currentTimeMillis()).nextInt(20000))
 }
