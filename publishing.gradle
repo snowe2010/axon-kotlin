@@ -22,6 +22,17 @@ artifacts {
     archives sourcesJar
 }
 
+
+import org.gradle.plugins.signing.Sign
+
+gradle.taskGraph.whenReady { taskGraph ->
+    if (taskGraph.allTasks.any { it instanceof Sign }) {
+        allprojects { ext."signing.keyId" = findProperty('signing.keyId') ?: System.getenv('SIGNING_KEY_ID') }
+        allprojects { ext."signing.secretKeyRingFile" = findProperty('signing.secretKeyRingFile') ?: System.getenv('SIGNING_KEYRING_FILE') }
+        allprojects { ext."signing.password" = findProperty('signing.password') ?: System.getenv('SIGNING_PASSWORD') }
+    }
+}
+
 signing {
     sign configurations.archives
 }
