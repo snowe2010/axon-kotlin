@@ -2,14 +2,16 @@ language: java
 install: true
 
 before_install:
-  - chmod +x gradlew
+- openssl aes-256-cbc -K $encrypted_2d73bda5dc40_key -iv $encrypted_2d73bda5dc40_iv
+  -in keyring.asc.enc -out keyring.asc -d
+- chmod +x gradlew
 
 stages:
-  - name: build
-  - name: snapshot
-    if: branch = develop
-  - name: release
-    if: branch = master
+- name: build
+- name: snapshot
+  if: branch = develop
+- name: release
+  if: branch = master
 
 jobs:
   include:
