@@ -20,4 +20,6 @@ jobs:
   - stage: snapshot
     script: "./gradlew artifactoryPublish -x test -Dbuild.number=$TRAVIS_BUILD_NUMBER"
   - stage: release
-    script: "./gradlew bintrayUpload -x test -Drelease=true -Dbuild.number=$TRAVIS_BUILD_NUMBER"
+    script:
+    - "gpg --import keyring.asc"
+    - "./gradlew bintrayUpload -x test -Drelease=true -Dbuild.number=$TRAVIS_BUILD_NUMBER"
