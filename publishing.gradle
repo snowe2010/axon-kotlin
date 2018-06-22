@@ -22,9 +22,9 @@ artifacts {
     archives sourcesJar
 }
 
-signing {
-    sign configurations.archives
-}
+//signing {
+//    sign configurations.archives
+//}
 
 
 publishing {
@@ -110,9 +110,9 @@ bintray {
         version {
             name = gradle.version
 
-            gpg {
-                sign = true
-            }
+//            gpg {
+//                sign = true
+//            }
 
             mavenCentralSync {
                 sync = true
