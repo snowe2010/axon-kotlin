@@ -3,7 +3,7 @@ apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.jfrog.artifactory'
 //apply plugin: 'maven'
 apply plugin: 'maven-publish'
-apply plugin: 'nebula.provided-base'
+//apply plugin: 'nebula.provided-base'
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
