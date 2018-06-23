@@ -1,3 +1,5 @@
+[![Master Build Status](https://travis-ci.com/snowe2010/axon-kotlin.svg?branch=master)](https://travis-ci.com/snowe2010/axon-kotlin)
+
 # axon-kotlin
 Extensions to the Axon Framework 
 
