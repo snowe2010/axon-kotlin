@@ -67,7 +67,7 @@ publishing {
 }
 
 signing {
-    sign publishing.publications
+    sign publishing.publications.mavenKotlin
 }
 
 install {
