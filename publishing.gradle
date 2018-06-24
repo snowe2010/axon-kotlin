@@ -37,11 +37,11 @@ bintray {
     user = findProperty('bintrayUsername') ?: System.getenv('BINTRAY_USER')
     key = findProperty('bintrayApiKey') ?: System.getenv('BINTRAY_KEY')
 
-
     pkg {
         userOrg = 'snowe'
         repo = 'maven'
         name = 'Axon-Kotlin'
+        version = project.version
         licenses = ['MIT']
         vcsUrl = 'https://github.com/snowe2010/axon-kotlin.git'
     }
