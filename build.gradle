@@ -5,7 +5,7 @@ plugins {
     id "nebula.source-jar" version "8.0.0"
     id "nebula.javadoc-jar" version "8.0.0"
     id 'nebula.nebula-bintray-publishing' version '3.5.2'
-    id 'nebula.release' version '6.0.0'
+    id 'nebula.release' version '6.3.3'
 }
 
 apply from: 'publishing.gradle'
