@@ -1,8 +1,8 @@
-
-apply plugin: 'signing'
+//apply plugin: "nebula.maven-publish"
+//apply plugin: "nebula.javadoc-jar"
+//apply plugin: "nebula.source-jar"
 //apply plugin: 'com.jfrog.bintray'
 //apply plugin: 'com.jfrog.artifactory'
-apply plugin: 'maven'
 //apply plugin: 'maven-publish'
 //apply plugin: 'nebula.provided-base'
 
@@ -26,13 +26,13 @@ apply plugin: 'maven'
 
 import org.gradle.plugins.signing.Sign
 
-gradle.taskGraph.whenReady { taskGraph ->
-    if (taskGraph.allTasks.any { it instanceof Sign }) {
-        allprojects { ext."signing.keyId" = findProperty('signing.keyId') ?: System.getenv('SIGNING_KEY_ID') }
-        allprojects { ext."signing.secretKeyRingFile" = findProperty('signing.secretKeyRingFile') ?: System.getenv('SIGNING_KEYRING_FILE') }
-        allprojects { ext."signing.password" = findProperty('signing.password') ?: System.getenv('SIGNING_PASSWORD') }
-    }
-}
+//gradle.taskGraph.whenReady { taskGraph ->
+//    if (taskGraph.allTasks.any { it instanceof Sign }) {
+//        allprojects { ext."signing.keyId" = findProperty('signing.keyId') ?: System.getenv('SIGNING_KEY_ID') }
+//        allprojects { ext."signing.secretKeyRingFile" = findProperty('signing.secretKeyRingFile') ?: System.getenv('SIGNING_KEYRING_FILE') }
+//        allprojects { ext."signing.password" = findProperty('signing.password') ?: System.getenv('SIGNING_PASSWORD') }
+//    }
+//}
 
 //publishing {
 //    publications {
@@ -67,9 +67,9 @@ gradle.taskGraph.whenReady { taskGraph ->
 //    }
 //}
 
-signing {
-    sign publishing.publications.nebula
-}
+//signing {
+//    sign publishing.publications.nebula
+//}
 /*
 
 install {
@@ -106,13 +106,13 @@ install {
 */
 
 bintray {
-/*    user = findProperty('bintrayUsername') ?: System.getenv('BINTRAY_USER')
+    user = findProperty('bintrayUsername') ?: System.getenv('BINTRAY_USER')
     key = findProperty('bintrayApiKey') ?: System.getenv('BINTRAY_KEY')
 
 //    configurations = ['archives']
-    publications = ['nebula']
+//    publications = ['nebula']
 
-    publish = true
+//    publish = true
 
     pkg {
         repo = 'maven'
@@ -120,21 +120,21 @@ bintray {
         licenses = ['MIT']
         vcsUrl = 'https://github.com/snowe2010/axon-kotlin.git'
 
-        version {
-            name = gradle.version
+//        version {
+//            name = gradle.version
 
 //            gpg {
 //                sign = true
 //            }
 
-            mavenCentralSync {
-                sync = true
-                user = project.findProperty('sonatypeUsername') ?: System.getenv('SONATYPE_USERNAME')
-                password = project.findProperty('sonatypePassword') ?: System.getenv('SONATYPE_PASSWORD')
-                close = '1'
-            }
-        }
-    }*/
+//            mavenCentralSync {
+//                sync = true
+//                user = project.findProperty('sonatypeUsername') ?: System.getenv('SONATYPE_USERNAME')
+//                password = project.findProperty('sonatypePassword') ?: System.getenv('SONATYPE_PASSWORD')
+//                close = '1'
+//            }
+//        }
+    }
     dryRun = true
 }
 
