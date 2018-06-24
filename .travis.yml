@@ -14,10 +14,10 @@ jobs:
   include:
   - stage: build
     script:
-    - "./gradlew build"
+    - "./gradlew build --info"
   - stage: snapshot
     script:
-    - "./gradlew artifactoryPublish -x test -Dbuild.number=$TRAVIS_BUILD_NUMBER"
+    - "./gradlew artifactoryPublish -x test -Dbuild.number=$TRAVIS_BUILD_NUMBER --info"
   - stage: release
     script:
-    - "./gradlew bintrayUpload -x test -Drelease=true -Dbuild.number=$TRAVIS_BUILD_NUMBER"
+    - "./gradlew bintrayUpload -x test -Drelease=true -Dbuild.number=$TRAVIS_BUILD_NUMBER --info"
