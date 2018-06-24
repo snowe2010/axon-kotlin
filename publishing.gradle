@@ -135,7 +135,7 @@ bintray {
 //            }
 //        }
     }
-    dryRun = true
+    dryRun = false
 }
 
 
