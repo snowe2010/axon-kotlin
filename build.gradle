@@ -9,13 +9,13 @@ plugins {
 }
 
 apply from: 'publishing.gradle'
-allprojects {
-    group = "com.tylerthrailkill"
-    version = gradle.version
-}
+//allprojects {
+//    group = "com.tylerthrailkill"
+//    version = gradle.version
+//}
 
 group 'com.tylerthrailkill'
-version = gradle.version
+//version = gradle.version
 
 repositories {
     mavenCentral()
