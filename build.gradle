@@ -1,9 +1,14 @@
 plugins {
     id "org.jetbrains.kotlin.jvm" version "1.2.41"
     id "org.jetbrains.kotlin.plugin.noarg" version "1.2.50"
-    id "com.jfrog.bintray" version "1.8.2"
-    id "com.jfrog.artifactory" version "4.7.4"
+//    id "com.jfrog.bintray" version "1.8.2"
+//    id "com.jfrog.artifactory" version "4.7.4"
 //    id 'nebula.provided-base' version '3.0.3' // if you want provided-base
+    id 'nebula.maven-publish' version '5.1.0'
+    id 'nebula.info' version '3.7.1'
+    id "nebula.source-jar" version "8.0.0"
+    id "nebula.javadoc-jar" version "8.0.0"
+    id 'nebula.nebula-bintray' version '3.5.2'
 }
 
 apply plugin: 'maven'

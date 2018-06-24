@@ -1,26 +1,27 @@
+
 apply plugin: 'signing'
-apply plugin: 'com.jfrog.bintray'
-apply plugin: 'com.jfrog.artifactory'
+//apply plugin: 'com.jfrog.bintray'
+//apply plugin: 'com.jfrog.artifactory'
 apply plugin: 'maven'
-apply plugin: 'maven-publish'
+//apply plugin: 'maven-publish'
 //apply plugin: 'nebula.provided-base'
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from 'build/javadoc'
-}
+//task javadocJar(type: Jar, dependsOn: javadoc) {
+//    classifier = 'javadoc'
+//    from 'build/javadoc'
+//}
 
-task sourcesJar(type: Jar) {
-    from sourceSets.main.allSource
-    classifier = 'sources'
-}
+//task sourcesJar(type: Jar) {
+//    from sourceSets.main.allSource
+//    classifier = 'sources'
+//}
 
-artifacts {
-    archives jar
-
-    archives javadocJar
-    archives sourcesJar
-}
+//artifacts {
+//    archives jar
+//
+//    archives javadocJar
+//    archives sourcesJar
+//}
 
 
 import org.gradle.plugins.signing.Sign
@@ -33,41 +34,41 @@ gradle.taskGraph.whenReady { taskGraph ->
     }
 }
 
-publishing {
-    publications {
-        mavenKotlin(MavenPublication) {
-            from components.java
-            artifact javadocJar
-            artifact sourcesJar
-            pom {
-                scm {
-                    url = 'scm:git@github.com:snowe2010/axon-kotlin.git'
-                    connection = 'scm:git@github.com:snowe2010/axon-kotlin.git'
-                    developerConnection = 'scm:git@github.com:snowe2010/axon-kotlin.git'
-                }
-
-                licenses {
-                    license {
-                        name = 'MIT'
-                        url = 'https://opensource.org/licenses/MIT'
-                        distribution = 'repo'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id = 'snowe2010'
-                        name = 'Tyler Thrailkill'
-                        email = 'tyler.b.thrailkill@gmail.com'
-                    }
-                }
-            }
-        }
-    }
-}
+//publishing {
+//    publications {
+//        mavenKotlin(MavenPublication) {
+//            from components.java
+//            artifact javadocJar
+//            artifact sourcesJar
+//            pom {
+//                scm {
+//                    url = 'scm:git@github.com:snowe2010/axon-kotlin.git'
+//                    connection = 'scm:git@github.com:snowe2010/axon-kotlin.git'
+//                    developerConnection = 'scm:git@github.com:snowe2010/axon-kotlin.git'
+//                }
+//
+//                licenses {
+//                    license {
+//                        name = 'MIT'
+//                        url = 'https://opensource.org/licenses/MIT'
+//                        distribution = 'repo'
+//                    }
+//                }
+//
+//                developers {
+//                    developer {
+//                        id = 'snowe2010'
+//                        name = 'Tyler Thrailkill'
+//                        email = 'tyler.b.thrailkill@gmail.com'
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
 
 signing {
-    sign publishing.publications.mavenKotlin
+    sign publishing.publications.nebula
 }
 /*
 
@@ -105,11 +106,11 @@ install {
 */
 
 bintray {
-    user = findProperty('bintrayUsername') ?: System.getenv('BINTRAY_USER')
+/*    user = findProperty('bintrayUsername') ?: System.getenv('BINTRAY_USER')
     key = findProperty('bintrayApiKey') ?: System.getenv('BINTRAY_KEY')
 
 //    configurations = ['archives']
-    publications = ['mavenKotlin']
+    publications = ['nebula']
 
     publish = true
 
@@ -133,9 +134,32 @@ bintray {
                 close = '1'
             }
         }
-    }
+    }*/
+    dryRun = true
 }
 
+
+/*
+project.afterEvaluate {
+    def publication = project.extensions.getByType(PublishingExtension).publications.findByName("mavenKotlin")
+    println(publication)
+    def artifacts = publication.publishableArtifacts.findResults {
+        println(it)
+        boolean signedArtifact = (it instanceof org.gradle.plugins.signing.Signature)
+        println("signed artifact")
+        println(signedArtifact)
+        def signedExtension = signedArtifact ? it.toSignArtifact.getExtension() : null
+
+    }
+    println(publication.publishableFiles.each { asdf -> println(asdf) })
+    bintray.publications.each { pub ->
+        println(pub)
+        project.publishing.publications.getByName(pub).publishableFiles.each { jjj -> println(jjj) }
+        bintrayUpload.inputs.files { -> project.publishing.publications.getByName(pub).publishableFiles }
+    }
+}
+*/
+/*
 artifactory {
     contextUrl = 'http://oss.jfrog.org'
     publish {
@@ -145,7 +169,7 @@ artifactory {
             password = project.findProperty('bintrayApiKey') ?: System.getenv('BINTRAY_KEY')
         }
         defaults {
-            publications('mavenKotlin')
+            publications('nebula')
             publishArtifacts = true
             publishPom = true
         }
@@ -155,3 +179,4 @@ artifactory {
     }
     clientConfig.info.setBuildNumber('' + new Random(System.currentTimeMillis()).nextInt(20000))
 }
+*/
