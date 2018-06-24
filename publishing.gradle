@@ -115,6 +115,7 @@ bintray {
 //    publish = true
 
     pkg {
+        orgName = 'snowe'
         repo = 'maven'
         name = 'Axon-Kotlin'
         licenses = ['MIT']
