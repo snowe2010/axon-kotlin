@@ -1,51 +1,21 @@
-
-/*
-install {
-    repositories.mavenInstaller {
-        pom.project {
-            name 'Axon-Kotlin'
-            packaging 'jar'
-            description 'Kotlin extensions for Axon.'
-            url 'https://github.com/snowe2010/axon-kotlin'
-
-            scm {
-                url 'scm:git@github.com:snowe2010/axon-kotlin.git'
-                connection 'scm:git@github.com:snowe2010/axon-kotlin.git'
-                developerConnection 'scm:git@github.com:snowe2010/axon-kotlin.git'
-            }
-
-            licenses {
-                license {
-                    name 'MIT'
-                    url 'https://opensource.org/licenses/MIT'
-                    distribution 'repo'
-                }
-            }
-
-            developers {
-                developer {
-                    id 'snowe2010'
-                    name 'Tyler Thrailkill'
-                }
-            }
-        }
-    }
-}
-*/
-
+apply plugin: "nebula.release"
 bintray {
-    user = findProperty('bintrayUsername') ?: System.getenv('BINTRAY_USER')
-    key = findProperty('bintrayApiKey') ?: System.getenv('BINTRAY_KEY')
+    user = findProperty('bintrayUser') ?: System.getenv('BINTRAY_USER')
+    key = findProperty('bintrayKey') ?: System.getenv('BINTRAY_KEY')
 
     pkg {
         userOrg = 'snowe'
         repo = 'maven'
         name = 'Axon-Kotlin'
-        version = project.version
         licenses = ['MIT']
         vcsUrl = 'https://github.com/snowe2010/axon-kotlin.git'
+        websiteUrl = 'https://github.com/snowe2010/${project.name}'
+        issueTrackerUrl = 'https://github.com/snowe2010/${project.name}/issues'
+        vcsUrl = 'https://github.com/snowe2010/${project.name}.git'
+        labels = ['axon', 'kotlin']
     }
-    dryRun = false
+    dryRun = true
+    publish = false
 }
 
 
