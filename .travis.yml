@@ -20,4 +20,4 @@ jobs:
     - "./gradlew artifactoryPublish -x test -Dbuild.number=$TRAVIS_BUILD_NUMBER --info"
   - stage: release
     script:
-    - "./gradlew bintrayUpload -x test -Drelease=true -Dbuild.number=$TRAVIS_BUILD_NUMBER --info"
+    - "./gradlew -Prelease.useLastTag=true final --info"
