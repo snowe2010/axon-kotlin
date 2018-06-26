@@ -17,6 +17,6 @@ Also includes a DSL for easier writing FixtureConfiguration tests.
 ### DSL 
 
 * All fixture tests
-* 
+* Nice error messages when unary plus isn't used when it should be
 
 ### Extensions
