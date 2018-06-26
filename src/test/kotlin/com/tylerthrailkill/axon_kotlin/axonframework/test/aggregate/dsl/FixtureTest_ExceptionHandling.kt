@@ -38,15 +38,28 @@ class FixtureTest_ExceptionHandling {
     @Test
     fun givenUnknownCommand() {
         assertFailsWith<NoHandlerForCommandException> {
-            fixture.givenCommands(
-                    CreateMyAggregateCommand("14"),
-                    UnknownCommand("14")
-            )
+            fixture {
+                given {
+                    commands {
+                        +CreateMyAggregateCommand("14")
+                        +UnknownCommand("14")
+                    }
+                }
+            }
         }
     }
 
     @Test
     fun testWhenExceptionTriggeringCommand() {
+        fixture {
+            given {
+                commands { +CreateMyAggregateCommand("14") }
+            }
+            whenever { ExceptionTriggeringCommand("14") }
+            expect {
+                exception<RuntimeException>()
+            }
+        }
         fixture.givenCommands(CreateMyAggregateCommand("14")).whenever(
                 ExceptionTriggeringCommand("14")
         ).expectException(RuntimeException::class.java)

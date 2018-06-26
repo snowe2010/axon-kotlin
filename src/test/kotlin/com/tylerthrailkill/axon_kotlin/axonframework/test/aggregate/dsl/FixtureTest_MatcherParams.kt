@@ -138,7 +138,7 @@ class FixtureTest_MatcherParams {
                 }
                 whenever { TestCommand("aggregateId") }
                 expect {
-                    exception = DoesMatch<Any>()
+                    exception(DoesMatch<Any>())
                 }
             }
             fail("Expected an AxonAssertionError")
@@ -190,7 +190,7 @@ class FixtureTest_MatcherParams {
                 }
                 whenever { StrangeCommand("aggregateId") }
                 expect {
-                    exception = DoesNotMatch<Any>()
+                    exception(DoesNotMatch<Any>())
                 }
             }
             fail("Expected an AxonAssertionError")

@@ -1,6 +1,7 @@
 package com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl
 
 import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.whenever
+import com.tylerthrailkill.axon_kotlin.axonframework.test.exceptions.AxonKotlinTestException
 import org.axonframework.commandhandling.CommandMessage
 import org.axonframework.eventhandling.EventMessage
 import org.axonframework.eventsourcing.AggregateFactory
@@ -37,50 +38,49 @@ operator fun <T> FixtureConfiguration<T>.invoke(init: AggregateTestFixtureBuilde
  * ```
  */
 class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfiguration<T>) {
-    private var wheneverCommand: Any? = null
-    private var wheneverMetaData: Map<String, Any> = MetaData.emptyInstance()
-    private val expectsBuilder: ExpectsBuilder<T> = ExpectsBuilder(aggregateTestFixture)
     private val givenBuilder: GivenBuilder<T> = GivenBuilder(aggregateTestFixture)
     private val registerBuilder: RegisterBuilder<T> = RegisterBuilder(aggregateTestFixture)
+    private lateinit var testExecutor: TestExecutor
+    private var resultValidator: ResultValidator? = null
 
     fun register(block: RegisterBuilder<T>.() -> Unit) = registerBuilder.apply(block)
 
-    fun given(block: GivenBuilder<T>.() -> Unit) = givenBuilder.apply(block)
+    fun given(block: GivenBuilder<T>.() -> Unit): TestExecutor {
+        givenBuilder.apply(block)
+        givenBuilder.initialize()
+        testExecutor = givenBuilder.testExecutor
+        return testExecutor
+    }
 
-    fun whenever(block: () -> Any) {
+    fun whenever(block: () -> Any): ResultValidator {
+        // Initialize test executor if it hasn't been already. This is only necessary if the user doesn't provide a `given` block
+        givenBuilder.initialize()
+        testExecutor = givenBuilder.testExecutor
+
+        val wheneverCommand: Any
+        var wheneverMetaData: Map<String, Any> = MetaData.emptyInstance()
+
         val out = block()
         when (out) {
             is Pair<*, *> -> {
-                wheneverCommand = out.first
+                wheneverCommand = out.first ?: throw AxonKotlinTestException("First argument of whenever call must be non null")
                 wheneverMetaData = out.second as Map<String, Any>
             }
             else -> {
                 wheneverCommand = out
             }
         }
+        resultValidator = testExecutor.whenever(wheneverCommand, wheneverMetaData)
+        return resultValidator ?: throw AxonKotlinTestException("Result Validator was unable to be created")
     }
 
-    fun expect(block: ExpectsBuilder<T>.() -> Unit) = expectsBuilder.apply(block)
+    fun expect(block: ExpectsBuilder.() -> Unit): ExpectsBuilder {
+        return resultValidator?.let { ExpectsBuilder(it).apply(block) }
+                ?: throw AxonKotlinTestException("Expect block cannot be used unless a whenever block is present before")
+    }
 
     fun build(): ResultValidator {
-        val testExecutor = buildTestExecutor()
-        return buildResultValidator(testExecutor)
-    }
-
-    private fun buildTestExecutor(): TestExecutor {
-        givenBuilder.initialize()
-        return givenBuilder.testExecutor
-    }
-
-    private fun buildResultValidator(testExecutor: TestExecutor): ResultValidator {
-        val resultValidator = testExecutor.whenever(wheneverCommand!!, wheneverMetaData)
-        if (expectsBuilder.eventsSet) expectsBuilder.eventsBuilder.list.let { resultValidator.expectEvents(*it.toTypedArray()) }
-        expectsBuilder.eventsMatching?.let { resultValidator.expectEventsMatching(it) }
-        expectsBuilder.returnValue?.let { resultValidator.expectReturnValue(it) }
-        expectsBuilder.returnValueMatching?.let { resultValidator.expectReturnValueMatching(it) }
-        expectsBuilder.exception?.let { resultValidator.expectException(it) }
-        expectsBuilder.successfulHandlerExecution?.let { resultValidator.expectSuccessfulHandlerExecution() }
-        return resultValidator
+        return resultValidator as ResultValidator
     }
 
     data class RegisterBuilder<T>(
@@ -173,16 +173,22 @@ class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfigurat
         }
     }
 
-    data class ExpectsBuilder<T>(
-            val aggregateTestFixture: FixtureConfiguration<T>,
-            var returnValue: Any? = null,
-            var returnValueMatching: Matcher<*>? = null,
-            var noEvents: Boolean? = null,
-            var eventsMatching: Matcher<out MutableList<in EventMessage<*>>>? = null,
-            var exception: Matcher<*>? = null
+    data class ExpectsBuilder(
+            val resultValidator: ResultValidator
     ) {
-        var successfulHandlerExecution: Boolean? = null
-            private set
+        var returnValue: Any? = null
+            set(value) {
+                resultValidator.expectReturnValue(value)
+            }
+        var returnValueMatching: Matcher<*>? = null
+            set(value) {
+                resultValidator.expectReturnValueMatching(value)
+            }
+        var noEvents: Boolean? = null
+        var eventsMatching: Matcher<out MutableList<in EventMessage<*>>>? = null
+            set(value) {
+                resultValidator.expectEventsMatching(value)
+            }
         val eventsBuilder: AnyUnaryBuilder = AnyUnaryBuilder()
         val commandsBuilder: AnyUnaryBuilder = AnyUnaryBuilder()
 
@@ -191,7 +197,8 @@ class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfigurat
 
         fun events(builder: AnyUnaryBuilder.() -> Unit) {
             eventsSet = true
-            eventsBuilder.apply(builder).list
+            val list: MutableList<Any> = eventsBuilder.apply(builder).list
+            resultValidator.expectEvents(*list.toTypedArray())
         }
 
         fun commands(builder: AnyUnaryBuilder.() -> Unit) {
@@ -200,7 +207,15 @@ class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfigurat
         }
 
         fun withSuccessfulHandlerExecution() {
-            successfulHandlerExecution = true
+            resultValidator.expectSuccessfulHandlerExecution()
+        }
+
+        inline fun <reified T : Throwable> exception() {
+            resultValidator.expectException(T::class.java)
+        }
+
+        fun exception(matcher: Matcher<*>) {
+            resultValidator.expectException(matcher)
         }
     }
 
