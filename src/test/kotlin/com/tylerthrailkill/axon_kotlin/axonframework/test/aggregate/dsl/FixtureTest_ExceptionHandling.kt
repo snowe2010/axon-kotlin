@@ -60,28 +60,33 @@ class FixtureTest_ExceptionHandling {
                 exception<RuntimeException>()
             }
         }
-        fixture.givenCommands(CreateMyAggregateCommand("14")).whenever(
-                ExceptionTriggeringCommand("14")
-        ).expectException(RuntimeException::class.java)
     }
 
     @Test
     fun testGivenExceptionTriggeringCommand() {
         assertFailsWith<RuntimeException> {
-            fixture.givenCommands(
-                    CreateMyAggregateCommand("14"),
-                    ExceptionTriggeringCommand("14")
-            )
+            fixture {
+                given {
+                    commands {
+                        +CreateMyAggregateCommand("14")
+                        +ExceptionTriggeringCommand("14")
+                    }
+                }
+            }
         }
     }
 
     @Test
     fun testGivenCommandWithInvalidIdentifier() {
-        fixture.givenCommands(
-                CreateMyAggregateCommand("1")
-        ).whenever(
-                ValidMyAggregateCommand("2")
-        ).expectException(EventStoreException::class.java)
+        fixture {
+            given {
+                commands { +CreateMyAggregateCommand("1") }
+            }
+            whenever { ValidMyAggregateCommand("2") }
+            expect {
+                exception<EventStoreException>()
+            }
+        }
     }
 
     /** TODO 3.3 tests
@@ -109,10 +114,14 @@ class FixtureTest_ExceptionHandling {
     @Test
     fun testWhenCommandWithInvalidIdentifier() {
         assertFailsWith<FixtureExecutionException> {
-            fixture.givenCommands(
-                    CreateMyAggregateCommand("1"),
-                    ValidMyAggregateCommand("2")
-            )
+            fixture {
+                given {
+                    commands {
+                        +CreateMyAggregateCommand("1")
+                        +ValidMyAggregateCommand("2")
+                    }
+                }
+            }
         }
     }
 
