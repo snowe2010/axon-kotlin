@@ -11,6 +11,7 @@ import org.axonframework.eventsourcing.eventstore.EventStoreException
 import org.axonframework.messaging.unitofwork.CurrentUnitOfWork
 import org.axonframework.test.FixtureExecutionException
 import org.axonframework.test.aggregate.FixtureConfiguration
+import org.axonframework.test.aggregate.TestExecutor
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -65,7 +66,11 @@ class FixtureTest_Generic {
     @Test
     fun testConfigurationOfRequiredCustomAggregateFactoryNotProvided_FailureOnGiven() {
         assertFailsWith<IncompatibleAggregateException> {
-            fixture.given(MyEvent("id1", 1))
+            fixture {
+                given {
+                    events { +MyEvent("id1", 1) }
+                }
+            }
         }
     }
 
@@ -78,37 +83,63 @@ class FixtureTest_Generic {
 
     @Test
     fun testAggregateIdentifier_ServerGeneratedIdentifier() {
-        fixture.registerAggregateFactory(mockAggregateFactory)
-        fixture.registerAnnotatedCommandHandler(MyCommandHandler(fixture.repository, fixture.eventBus))
-        fixture.givenNoPriorActivity()
-                .whenever(CreateAggregateCommand())
+        fixture {
+            register {
+                aggregateFactory = mockAggregateFactory
+                annotatedCommandHandler = MyCommandHandler(fixture.repository, fixture.eventBus)
+            }
+            whenever { CreateAggregateCommand() }
+        }
     }
 
     @Test
     fun testStoringExistingAggregateGeneratesException() {
-        fixture.registerAggregateFactory(mockAggregateFactory)
-        fixture.registerAnnotatedCommandHandler(MyCommandHandler(fixture.repository, fixture.eventBus))
-        fixture.given(MyEvent("aggregateId", 1))
-                .`when`(CreateAggregateCommand("aggregateId"))
-                .expectException(EventStoreException::class.java)
+        fixture {
+            register {
+                aggregateFactory = mockAggregateFactory
+                annotatedCommandHandler = MyCommandHandler(fixture.repository, fixture.eventBus)
+            }
+            given {
+                events { +MyEvent("aggregateId", 1) }
+            }
+            whenever { CreateAggregateCommand("aggregateId") }
+            expect {
+                exception<EventStoreException>()
+            }
+        }
     }
 
     @Test
     fun testInjectResources_CommandHandlerAlreadyRegistered() {
         assertFailsWith<FixtureExecutionException> {
-            fixture.registerAggregateFactory(mockAggregateFactory)
-            fixture.registerAnnotatedCommandHandler(MyCommandHandler(fixture.repository, fixture.eventBus))
-            fixture.registerInjectableResource("I am injectable")
+            fixture {
+                register {
+                    aggregateFactory = mockAggregateFactory
+                    annotatedCommandHandler = MyCommandHandler(fixture.repository, fixture.eventBus)
+                    injectableResources { +"I am injectable" }
+                }
+            }
         }
     }
 
     @Test
     fun testAggregateIdentifier_IdentifierAutomaticallyDeducted() {
-        fixture.registerAggregateFactory(mockAggregateFactory)
-        fixture.registerAnnotatedCommandHandler(MyCommandHandler(fixture.repository, fixture.eventBus))
-        fixture.given(MyEvent("AggregateId", 1), MyEvent("AggregateId", 2))
-                .whenever(TestCommand("AggregateId"))
-                .expectEvents(MyEvent("AggregateId", 3))
+        fixture {
+            register {
+                aggregateFactory = mockAggregateFactory
+                annotatedCommandHandler = MyCommandHandler(fixture.repository, fixture.eventBus)
+            }
+            given {
+                events {
+                    +MyEvent("AggregateId", 1)
+                    +MyEvent("AggregateId", 2)
+                }
+            }
+            whenever { TestCommand("AggregateId") }
+            expect {
+                events { +MyEvent("AggregateId", 3) }
+            }
+        }
 
         val events = fixture.eventStore.readEvents("AggregateId")
         for (t in 0..2) {
@@ -121,17 +152,22 @@ class FixtureTest_Generic {
 
     @Test
     fun testReadAggregate_WrongIdentifier() {
-        fixture.registerAggregateFactory(mockAggregateFactory)
-        fixture.registerAnnotatedCommandHandler(MyCommandHandler(fixture.repository, fixture.eventBus))
-        val exec = fixture.given(MyEvent("AggregateId", 1))
-        try {
-            exec.whenever(TestCommand("OtherIdentifier"))
-            fail("Expected an AssertionError")
-        } catch (e: AssertionError) {
-            assertTrue(e.message!!.contains("OtherIdentifier"), "Wrong message. Was: " + e.message)
-            assertTrue(e.message!!.contains("AggregateId"), "Wrong message. Was: " + e.message)
+        fixture {
+            register {
+                aggregateFactory = mockAggregateFactory
+                annotatedCommandHandler = MyCommandHandler(fixture.repository, fixture.eventBus)
+            }
+            val exec: TestExecutor = given {
+                events { +MyEvent("AggregateId", 1) }
+            }
+            try {
+                exec.whenever(TestCommand("OtherIdentifier"))
+                fail("Expected an AssertionError")
+            } catch (e: AssertionError) {
+                assertTrue(e.message!!.contains("OtherIdentifier"), "Wrong message. Was: " + e.message)
+                assertTrue(e.message!!.contains("AggregateId"), "Wrong message. Was: " + e.message)
+            }
         }
-
     }
 
     @Test

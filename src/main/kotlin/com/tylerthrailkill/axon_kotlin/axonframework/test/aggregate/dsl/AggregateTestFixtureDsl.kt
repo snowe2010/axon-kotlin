@@ -19,7 +19,6 @@ import org.hamcrest.Matcher
 operator fun <T> FixtureConfiguration<T>.invoke(init: AggregateTestFixtureBuilder<T>.() -> Unit): FixtureConfiguration<T> {
     val fixture = AggregateTestFixtureBuilder(this)
     fixture.init()
-    fixture.build()
     return fixture.aggregateTestFixture
 }
 
@@ -77,10 +76,6 @@ class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfigurat
     fun expect(block: ExpectsBuilder.() -> Unit): ExpectsBuilder {
         return resultValidator?.let { ExpectsBuilder(it).apply(block) }
                 ?: throw AxonKotlinTestException("Expect block cannot be used unless a whenever block is present before")
-    }
-
-    fun build(): ResultValidator {
-        return resultValidator as ResultValidator
     }
 
     data class RegisterBuilder<T>(
