@@ -75,44 +75,76 @@ class FixtureTest_CommandInterceptors {
 
     @Test
     fun testRegisteredCommandDispatchInterceptorIsInvokedAndAltersAppliedEvent() {
-        fixture.given(StandardAggregateCreatedEvent(InterceptorAggregate.AGGREGATE_IDENTIFIER))
-                .whenever(TestCommand(InterceptorAggregate.AGGREGATE_IDENTIFIER))
-                .expectEvents(TestEvent(InterceptorAggregate.AGGREGATE_IDENTIFIER, emptyMap()))
+        fixture {
+            given {
+                events {
+                    +StandardAggregateCreatedEvent(InterceptorAggregate.AGGREGATE_IDENTIFIER)
+                }
+            }
+            whenever { TestCommand(InterceptorAggregate.AGGREGATE_IDENTIFIER) }
+            expect {
+                events {
+                    +TestEvent(InterceptorAggregate.AGGREGATE_IDENTIFIER, emptyMap())
+                }
+            }
+        }
 
-        fixture.registerCommandDispatchInterceptor(TestCommandDispatchInterceptor())
-
-        val expectedValues = MetaData(Collections.singletonMap(DISPATCH_META_DATA_KEY, DISPATCH_META_DATA_VALUE))
-
-        fixture.given(StandardAggregateCreatedEvent(InterceptorAggregate.AGGREGATE_IDENTIFIER))
-                .whenever(TestCommand(InterceptorAggregate.AGGREGATE_IDENTIFIER))
-                .expectEvents(TestEvent(InterceptorAggregate.AGGREGATE_IDENTIFIER, expectedValues))
+        fixture {
+            register {
+                commandDispatchInterceptors { +TestCommandDispatchInterceptor() }
+            }
+            given {
+                events {
+                    +StandardAggregateCreatedEvent(InterceptorAggregate.AGGREGATE_IDENTIFIER)
+                }
+            }
+            whenever { TestCommand(InterceptorAggregate.AGGREGATE_IDENTIFIER) }
+            expect {
+                events { +TestEvent(InterceptorAggregate.AGGREGATE_IDENTIFIER, mapOf(DISPATCH_META_DATA_KEY to DISPATCH_META_DATA_VALUE)) }
+            }
+        }
     }
 
     @Test
     fun testRegisteredCommandDispatchInterceptorIsInvokedForFixtureMethodsGivenCommands() {
-        fixture.registerCommandDispatchInterceptor(TestCommandDispatchInterceptor())
-
-        val expectedValues = MetaData(Collections.singletonMap(DISPATCH_META_DATA_KEY, DISPATCH_META_DATA_VALUE))
-
-        fixture.givenCommands(CreateStandardAggregateCommand(InterceptorAggregate.AGGREGATE_IDENTIFIER))
-                .whenever(TestCommand(InterceptorAggregate.AGGREGATE_IDENTIFIER))
-                .expectEvents(TestEvent(InterceptorAggregate.AGGREGATE_IDENTIFIER, expectedValues))
+        fixture {
+            register {
+                commandDispatchInterceptors { +TestCommandDispatchInterceptor() }
+            }
+            given {
+                commands { +CreateStandardAggregateCommand(InterceptorAggregate.AGGREGATE_IDENTIFIER) }
+            }
+            whenever { TestCommand(InterceptorAggregate.AGGREGATE_IDENTIFIER) }
+            expect {
+                events { +TestEvent(InterceptorAggregate.AGGREGATE_IDENTIFIER, mapOf(DISPATCH_META_DATA_KEY to DISPATCH_META_DATA_VALUE)) }
+            }
+        }
     }
 
     @Test
     @Throws(Exception::class)
     fun testRegisteredCommandHandlerInterceptorsAreInvoked() {
-        fixture.registerCommandHandlerInterceptor(TestCommandHandlerInterceptor())
-        whenever(mockCommandHandlerInterceptor.handle(any<UnitOfWork<CommandMessage<Any>>>(), any<InterceptorChain>()))
-                .thenAnswer({ it.arguments })
-        fixture.registerCommandHandlerInterceptor(mockCommandHandlerInterceptor)
+        whenever(mockCommandHandlerInterceptor.handle(any<UnitOfWork<CommandMessage<Any>>>(), any()))
+                .thenAnswer { it.arguments }
 
         val expectedCommand = TestCommand(InterceptorAggregate.AGGREGATE_IDENTIFIER)
         val expectedMetaDataMap: HashMap<String, Any> = HashMap<String, Any>()
         expectedMetaDataMap[HANDLER_META_DATA_KEY] = HANDLER_META_DATA_VALUE
 
-        fixture.given(StandardAggregateCreatedEvent(InterceptorAggregate.AGGREGATE_IDENTIFIER))
-                .whenever(expectedCommand, expectedMetaDataMap)
+        fixture {
+            register {
+                commandHandlerInterceptors {
+                    +TestCommandHandlerInterceptor()
+                    +mockCommandHandlerInterceptor
+                }
+            }
+            given {
+                events {
+                    +StandardAggregateCreatedEvent(InterceptorAggregate.AGGREGATE_IDENTIFIER)
+                }
+            }
+            whenever { expectedCommand to expectedMetaDataMap }
+        }
 
         val unitOfWorkCaptor = argumentCaptor<UnitOfWork<CommandMessage<Any>>>()
         val interceptorChainCaptor = argumentCaptor<InterceptorChain>()
@@ -125,40 +157,59 @@ class FixtureTest_CommandInterceptors {
 
     @Test
     fun testRegisteredCommandHandlerInterceptorIsInvokedAndAltersEvent() {
-        fixture.given(StandardAggregateCreatedEvent(InterceptorAggregate.AGGREGATE_IDENTIFIER))
-                .whenever(TestCommand(InterceptorAggregate.AGGREGATE_IDENTIFIER))
-                .expectEvents(TestEvent(InterceptorAggregate.AGGREGATE_IDENTIFIER, emptyMap()))
-
-        fixture.registerCommandHandlerInterceptor(TestCommandHandlerInterceptor())
+        fixture {
+            given {
+                events { +StandardAggregateCreatedEvent(InterceptorAggregate.AGGREGATE_IDENTIFIER) }
+            }
+            whenever { TestCommand(InterceptorAggregate.AGGREGATE_IDENTIFIER) }
+            expect {
+                events { +TestEvent(InterceptorAggregate.AGGREGATE_IDENTIFIER, emptyMap()) }
+            }
+        }
 
         val expectedMetaDataMap = HashMap<String, Any>()
         expectedMetaDataMap[HANDLER_META_DATA_KEY] = HANDLER_META_DATA_VALUE
-
-        fixture.given(StandardAggregateCreatedEvent(InterceptorAggregate.AGGREGATE_IDENTIFIER))
-                .whenever(TestCommand(InterceptorAggregate.AGGREGATE_IDENTIFIER), expectedMetaDataMap)
-                .expectEvents(TestEvent(InterceptorAggregate.AGGREGATE_IDENTIFIER, expectedMetaDataMap))
+        fixture {
+            register {
+                commandHandlerInterceptors { +TestCommandHandlerInterceptor() }
+            }
+            given {
+                events { +StandardAggregateCreatedEvent(InterceptorAggregate.AGGREGATE_IDENTIFIER) }
+            }
+            whenever { TestCommand(InterceptorAggregate.AGGREGATE_IDENTIFIER) to expectedMetaDataMap }
+            expect { events { +TestEvent(InterceptorAggregate.AGGREGATE_IDENTIFIER, expectedMetaDataMap) } }
+        }
     }
 
     @Test
     fun testRegisteredCommandHandlerInterceptorIsInvokedForFixtureMethodsGivenCommands() {
-        fixture.registerCommandHandlerInterceptor(TestCommandHandlerInterceptor())
-
         val expectedMetaDataMap = HashMap<String, Any>()
         expectedMetaDataMap[HANDLER_META_DATA_KEY] = HANDLER_META_DATA_VALUE
-
-        fixture.givenCommands(CreateStandardAggregateCommand(InterceptorAggregate.AGGREGATE_IDENTIFIER))
-                .whenever(TestCommand(InterceptorAggregate.AGGREGATE_IDENTIFIER), expectedMetaDataMap)
-                .expectEvents(TestEvent(InterceptorAggregate.AGGREGATE_IDENTIFIER, expectedMetaDataMap))
+        fixture {
+            register {
+                commandHandlerInterceptors { +TestCommandHandlerInterceptor() }
+            }
+            given {
+                commands { +CreateStandardAggregateCommand(InterceptorAggregate.AGGREGATE_IDENTIFIER) }
+            }
+            whenever { TestCommand(InterceptorAggregate.AGGREGATE_IDENTIFIER) to expectedMetaDataMap }
+            expect {
+                events { +TestEvent(InterceptorAggregate.AGGREGATE_IDENTIFIER, expectedMetaDataMap) }
+            }
+        }
     }
 
     @Test
     fun testRegisteredCommandDispatchAndHandlerInterceptorAreBothInvokedAndAlterEvent() {
-        fixture.given(StandardAggregateCreatedEvent(InterceptorAggregate.AGGREGATE_IDENTIFIER))
-                .whenever(TestCommand(InterceptorAggregate.AGGREGATE_IDENTIFIER))
-                .expectEvents(TestEvent(InterceptorAggregate.AGGREGATE_IDENTIFIER, emptyMap()))
-
-        fixture.registerCommandDispatchInterceptor(TestCommandDispatchInterceptor())
-        fixture.registerCommandHandlerInterceptor(TestCommandHandlerInterceptor())
+        fixture {
+            given {
+                events { +StandardAggregateCreatedEvent(InterceptorAggregate.AGGREGATE_IDENTIFIER) }
+            }
+            whenever { TestCommand(InterceptorAggregate.AGGREGATE_IDENTIFIER) }
+            expect {
+                events { +TestEvent(InterceptorAggregate.AGGREGATE_IDENTIFIER, emptyMap()) }
+            }
+        }
 
         val testMetaDataMap = HashMap<String, Any>()
         testMetaDataMap[HANDLER_META_DATA_KEY] = HANDLER_META_DATA_VALUE
@@ -166,9 +217,19 @@ class FixtureTest_CommandInterceptors {
         val expectedMetaDataMap = HashMap(testMetaDataMap)
         expectedMetaDataMap[DISPATCH_META_DATA_KEY] = DISPATCH_META_DATA_VALUE
 
-        fixture.given(StandardAggregateCreatedEvent(InterceptorAggregate.AGGREGATE_IDENTIFIER))
-                .whenever(TestCommand(InterceptorAggregate.AGGREGATE_IDENTIFIER), testMetaDataMap)
-                .expectEvents(TestEvent(InterceptorAggregate.AGGREGATE_IDENTIFIER, MetaData(expectedMetaDataMap)))
+        fixture {
+            register {
+                commandDispatchInterceptors { +TestCommandDispatchInterceptor() }
+                commandHandlerInterceptors { +TestCommandHandlerInterceptor() }
+            }
+            given {
+                events { +StandardAggregateCreatedEvent(InterceptorAggregate.AGGREGATE_IDENTIFIER) }
+            }
+            whenever { TestCommand(InterceptorAggregate.AGGREGATE_IDENTIFIER) to testMetaDataMap }
+            expect {
+                events { +TestEvent(InterceptorAggregate.AGGREGATE_IDENTIFIER, MetaData(expectedMetaDataMap)) }
+            }
+        }
     }
 
     private class InterceptorAggregate {

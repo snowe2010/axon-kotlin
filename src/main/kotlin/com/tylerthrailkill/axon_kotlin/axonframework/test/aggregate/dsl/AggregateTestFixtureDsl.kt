@@ -7,6 +7,7 @@ import org.axonframework.eventsourcing.AggregateFactory
 import org.axonframework.eventsourcing.EventSourcingRepository
 import org.axonframework.messaging.MessageDispatchInterceptor
 import org.axonframework.messaging.MessageHandler
+import org.axonframework.messaging.MessageHandlerInterceptor
 import org.axonframework.messaging.MetaData
 import org.axonframework.test.aggregate.FixtureConfiguration
 import org.axonframework.test.aggregate.ResultValidator
@@ -87,7 +88,7 @@ class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfigurat
     ) {
         var repository: EventSourcingRepository<T>? = null
             set(value) {
-                aggregateTestFixture = aggregateTestFixture.registerRepository(repository)
+                aggregateTestFixture = aggregateTestFixture.registerRepository(value)
             }
         /**
          * Aggregate factory has to be registered immediately else a repository might be set up before this is called
@@ -102,10 +103,18 @@ class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfigurat
             }
         private var injectableResourcesBuilder: AnyUnaryBuilder = AnyUnaryBuilder()
         private var commandDispatchInterceptorBuilder: RegisterCommandDispatchInterceptorBuilder = RegisterCommandDispatchInterceptorBuilder()
+        private var commandHandlerInterceptorBuilder: RegisterCommandHandlerInterceptorBuilder = RegisterCommandHandlerInterceptorBuilder()
 
         class RegisterCommandDispatchInterceptorBuilder {
             val list = mutableListOf<MessageDispatchInterceptor<CommandMessage<*>>>()
             operator fun MessageDispatchInterceptor<CommandMessage<*>>.unaryPlus() {
+                list.add(this)
+            }
+        }
+
+        class RegisterCommandHandlerInterceptorBuilder {
+            val list = mutableListOf<MessageHandlerInterceptor<CommandMessage<*>>>()
+            operator fun MessageHandlerInterceptor<CommandMessage<*>>.unaryPlus() {
                 list.add(this)
             }
         }
@@ -121,6 +130,12 @@ class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfigurat
         fun commandDispatchInterceptors(builder: RegisterCommandDispatchInterceptorBuilder.() -> Unit) {
             commandDispatchInterceptorBuilder.apply(builder).list.forEach {
                 aggregateTestFixture.registerCommandDispatchInterceptor(it)
+            }
+        }
+
+        fun commandHandlerInterceptors(builder: RegisterCommandHandlerInterceptorBuilder.() -> Unit) {
+            commandHandlerInterceptorBuilder.apply(builder).list.forEach {
+                aggregateTestFixture.registerCommandHandlerInterceptor(it)
             }
         }
 
