@@ -18,6 +18,7 @@ import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.whenever
 import org.axonframework.commandhandling.model.AggregateNotFoundException
 import org.axonframework.test.AxonAssertionError
 import org.axonframework.test.aggregate.FixtureConfiguration
+import org.axonframework.test.matchers.FieldFilter
 import org.hamcrest.core.IsNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -43,29 +44,53 @@ class FixtureTest_RegularParams {
 
     @Test
     fun testFixture_NoEventsInStore() {
-        fixture.registerAnnotatedCommandHandler(MyCommandHandler(fixture.repository, fixture.eventBus))
-                .given()
-                .whenever(TestCommand(UUID.randomUUID()))
-                .expectException(AggregateNotFoundException::class.java)
+        fixture {
+            register {
+                annotatedCommandHandler = MyCommandHandler(fixture.repository, fixture.eventBus)
+            }
+            whenever { TestCommand(UUID.randomUUID()) }
+            expect {
+                exception<AggregateNotFoundException>()
+            }
+        }
     }
 
     @Test
     fun testFirstFixture() {
-        val validator = fixture
-                .registerAnnotatedCommandHandler(MyCommandHandler(fixture.repository, fixture.eventBus))
-                .given(MyEvent("aggregateId", 1))
-                .whenever(TestCommand("aggregateId"))
+        val validator = fixture {
+            register {
+                annotatedCommandHandler = MyCommandHandler(fixture.repository, fixture.eventBus)
+            }
+            given {
+                events { +MyEvent("aggregateId", 1) }
+            }
+            whenever { TestCommand("aggregateId") }
+        }.resultValidator
         validator.expectReturnValue(null)
         validator.expectEvents(MyEvent("aggregateId", 2))
     }
 
     @Test
     fun testExpectEventsIgnoresFilteredField() {
-        val validator = fixture
-                .registerAnnotatedCommandHandler(MyCommandHandler(fixture.repository, fixture.eventBus))
-                .registerFieldFilter { field -> field.name != "someBytes" }
-                .given(MyEvent("aggregateId", 1))
-                .whenever(TestCommand("aggregateId"))
+        val validator = fixture {
+            register {
+                annotatedCommandHandler = MyCommandHandler(fixture.repository, fixture.eventBus)
+                fieldFilters {
+                    +FieldFilter { field -> field.name != "someBytes" }
+                }
+            }
+            given {
+                events {
+                    +MyEvent("aggregateId", 1)
+                }
+            }
+            whenever { TestCommand("aggregateId") }
+        }.resultValidator
+//        val validator = fixture
+//                .registerAnnotatedCommandHandler(MyCommandHandler(fixture.repository, fixture.eventBus))
+//                .registerFieldFilter { field -> field.name != "someBytes" }
+//                .given(MyEvent("aggregateId", 1))
+//                .whenever(TestCommand("aggregateId"))
         validator.expectReturnValue(null)
         validator.expectEvents(MyEvent("aggregateId", 2, "ignored".toByteArray()))
     }
@@ -74,32 +99,42 @@ class FixtureTest_RegularParams {
     fun testFixture_SetterInjection() {
         val commandHandler = MyCommandHandler()
         commandHandler.repository = fixture.repository
-        fixture.registerAnnotatedCommandHandler(commandHandler)
-                .given(MyEvent("aggregateId", 1), MyEvent("aggregateId", 2))
-                .whenever(TestCommand("aggregateId"))
-                .expectReturnValueMatching(IsNull.nullValue())
-                .expectEvents(MyEvent("aggregateId", 3))
-    }
-
-    @Test
-    fun testFixture_GivenAList() {
-        val givenEvents = Arrays.asList<Any>(MyEvent("aggregateId", 1), MyEvent("aggregateId", 2),
-                MyEvent("aggregateId", 3))
-        fixture.registerAnnotatedCommandHandler(MyCommandHandler(fixture.repository, fixture.eventBus))
-                .given(givenEvents)
-                .whenever(TestCommand("aggregateId"))
-                .expectEvents(MyEvent("aggregateId", 4))
-                .expectSuccessfulHandlerExecution()
+        fixture {
+            register {
+                annotatedCommandHandler = commandHandler
+            }
+            given {
+                events {
+                    +MyEvent("aggregateId", 1)
+                    +MyEvent("aggregateId", 2)
+                }
+            }
+            whenever { TestCommand("aggregateId") }
+            expect {
+                returnValueMatching = IsNull.nullValue()
+                events {
+                    +MyEvent("aggregateId", 3)
+                }
+            }
+        }
     }
 
     @Test
     fun testFixtureDetectsStateChangeOutsideOfHandler_ExplicitValue() {
-        val givenEvents = Arrays.asList<Any>(MyEvent("aggregateId", 1), MyEvent("aggregateId", 2),
-                MyEvent("aggregateId", 3))
         try {
-            fixture.registerAnnotatedCommandHandler(MyCommandHandler(fixture.repository, fixture.eventBus))
-                    .given(givenEvents)
-                    .whenever(IllegalStateChangeCommand("aggregateId", 5))
+            fixture {
+                register {
+                    annotatedCommandHandler = MyCommandHandler(fixture.repository, fixture.eventBus)
+                }
+                given {
+                    events {
+                        +MyEvent("aggregateId", 1)
+                        +MyEvent("aggregateId", 2)
+                        +MyEvent("aggregateId", 3)
+                    }
+                }
+                whenever { IllegalStateChangeCommand("aggregateId", 5) }
+            }
             fail("Expected AssertionError")
         } catch (e: AssertionError) {
             assertTrue(e.message!!.contains(".lastNumber\""), "Wrong message: " + e.message)
@@ -111,22 +146,40 @@ class FixtureTest_RegularParams {
 
     @Test
     fun testFixtureIgnoredStateChangeInFilteredField() {
-        val givenEvents = Arrays.asList<Any>(MyEvent("aggregateId", 1), MyEvent("aggregateId", 2),
-                MyEvent("aggregateId", 3))
-        fixture.registerFieldFilter { field -> field.name != "lastNumber" }
-        fixture.registerAnnotatedCommandHandler(MyCommandHandler(fixture.repository, fixture.eventBus))
-                .given(givenEvents)
-                .whenever(IllegalStateChangeCommand("aggregateId", 5))
+        fixture {
+            register {
+                fieldFilters {
+                    +FieldFilter { field -> field.name != "lastNumber" }
+                }
+                annotatedCommandHandler = MyCommandHandler(fixture.repository, fixture.eventBus)
+            }
+            given {
+                events {
+                    +MyEvent("aggregateId", 1)
+                    +MyEvent("aggregateId", 2)
+                    +MyEvent("aggregateId", 3)
+                }
+            }
+            whenever { IllegalStateChangeCommand("aggregateId", 5) }
+        }
     }
 
     @Test
     fun testFixtureDetectsStateChangeOutsideOfHandler_NullValue() {
-        val givenEvents = Arrays.asList<Any>(MyEvent("aggregateId", 1), MyEvent("aggregateId", 2),
-                MyEvent("aggregateId", 3))
         try {
-            fixture.registerAnnotatedCommandHandler(MyCommandHandler(fixture.repository, fixture.eventBus))
-                    .given(givenEvents)
-                    .whenever(IllegalStateChangeCommand("aggregateId", null))
+            fixture {
+                register {
+                    annotatedCommandHandler = MyCommandHandler(fixture.repository, fixture.eventBus)
+                }
+                given {
+                    events {
+                        +MyEvent("aggregateId", 1)
+                        +MyEvent("aggregateId", 2)
+                        +MyEvent("aggregateId", 3)
+                    }
+                }
+                whenever { IllegalStateChangeCommand("aggregateId", null) }
+            }
             fail("Expected AssertionError")
         } catch (e: AssertionError) {
             assertTrue(e.message!!.contains(".lastNumber\""), "Wrong message: " + e.message)
@@ -138,12 +191,20 @@ class FixtureTest_RegularParams {
 
     @Test
     fun testFixtureDetectsStateChangeOutsideOfHandler_Ignored() {
-        val givenEvents = Arrays.asList<Any>(MyEvent("aggregateId", 1), MyEvent("aggregateId", 2),
-                MyEvent("aggregateId", 3))
-        fixture.setReportIllegalStateChange(false)
-        fixture.registerAnnotatedCommandHandler(MyCommandHandler(fixture.repository, fixture.eventBus))
-                .given(givenEvents)
-                .whenever(IllegalStateChangeCommand("aggregateId", null))
+        fixture {
+            reportIllegalStateChange = false
+            register {
+                annotatedCommandHandler = MyCommandHandler(fixture.repository, fixture.eventBus)
+            }
+            given {
+                events {
+                    +MyEvent("aggregateId", 1)
+                    +MyEvent("aggregateId", 2)
+                    +MyEvent("aggregateId", 3)
+                }
+            }
+            whenever { IllegalStateChangeCommand("aggregateId", null) }
+        }
     }
 
     @Test

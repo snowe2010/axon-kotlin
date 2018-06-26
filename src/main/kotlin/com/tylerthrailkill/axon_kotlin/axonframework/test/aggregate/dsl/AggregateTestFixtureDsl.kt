@@ -13,13 +13,14 @@ import org.axonframework.messaging.MetaData
 import org.axonframework.test.aggregate.FixtureConfiguration
 import org.axonframework.test.aggregate.ResultValidator
 import org.axonframework.test.aggregate.TestExecutor
+import org.axonframework.test.matchers.FieldFilter
 import org.hamcrest.Matcher
 
 
-operator fun <T> FixtureConfiguration<T>.invoke(init: AggregateTestFixtureBuilder<T>.() -> Unit): FixtureConfiguration<T> {
+operator fun <T> FixtureConfiguration<T>.invoke(init: AggregateTestFixtureBuilder<T>.() -> Unit): AggregateTestFixtureBuilder<T> {
     val fixture = AggregateTestFixtureBuilder(this)
     fixture.init()
-    return fixture.aggregateTestFixture
+    return fixture
 }
 
 /**
@@ -37,10 +38,16 @@ operator fun <T> FixtureConfiguration<T>.invoke(init: AggregateTestFixtureBuilde
  * ```
  */
 class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfiguration<T>) {
+    var reportIllegalStateChange: Boolean = true
+        set(value) {
+            aggregateTestFixture.setReportIllegalStateChange(value)
+        }
     private val givenBuilder: GivenBuilder<T> = GivenBuilder(aggregateTestFixture)
     private val registerBuilder: RegisterBuilder<T> = RegisterBuilder(aggregateTestFixture)
-    private lateinit var testExecutor: TestExecutor
-    private var resultValidator: ResultValidator? = null
+    lateinit var testExecutor: TestExecutor
+    private var _resultValidator: ResultValidator? = null
+    val resultValidator: ResultValidator
+        get() = _resultValidator ?: throw AxonKotlinTestException("Result Validator was not created in `fixture` block")
 
     fun register(block: RegisterBuilder<T>.() -> Unit) = registerBuilder.apply(block)
 
@@ -69,12 +76,12 @@ class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfigurat
                 wheneverCommand = out
             }
         }
-        resultValidator = testExecutor.whenever(wheneverCommand, wheneverMetaData)
-        return resultValidator ?: throw AxonKotlinTestException("Result Validator was unable to be created")
+        _resultValidator = testExecutor.whenever(wheneverCommand, wheneverMetaData)
+        return _resultValidator ?: throw AxonKotlinTestException("Result Validator was unable to be created")
     }
 
     fun expect(block: ExpectsBuilder.() -> Unit): ExpectsBuilder {
-        return resultValidator?.let { ExpectsBuilder(it).apply(block) }
+        return _resultValidator?.let { ExpectsBuilder(it).apply(block) }
                 ?: throw AxonKotlinTestException("Expect block cannot be used unless a whenever block is present before")
     }
 
@@ -99,6 +106,7 @@ class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfigurat
         private var injectableResourcesBuilder: AnyUnaryBuilder = AnyUnaryBuilder()
         private var commandDispatchInterceptorBuilder: RegisterCommandDispatchInterceptorBuilder = RegisterCommandDispatchInterceptorBuilder()
         private var commandHandlerInterceptorBuilder: RegisterCommandHandlerInterceptorBuilder = RegisterCommandHandlerInterceptorBuilder()
+        private var fieldFilterBuilder: RegisterFieldFiltersBuilder = RegisterFieldFiltersBuilder()
 
         class RegisterCommandDispatchInterceptorBuilder {
             val list = mutableListOf<MessageDispatchInterceptor<CommandMessage<*>>>()
@@ -112,6 +120,23 @@ class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfigurat
             operator fun MessageHandlerInterceptor<CommandMessage<*>>.unaryPlus() {
                 list.add(this)
             }
+        }
+
+        class RegisterFieldFiltersBuilder {
+            val list = mutableListOf<FieldFilter>()
+            operator fun FieldFilter.unaryPlus() {
+                list.add(this)
+            }
+        }
+
+        fun fieldFilters(builder: RegisterFieldFiltersBuilder.() -> Unit) {
+            fieldFilterBuilder.apply(builder).list.forEach {
+                aggregateTestFixture.registerFieldFilter(it)
+            }
+        }
+
+        fun fieldFilter(fieldFilter: FieldFilter) {
+            aggregateTestFixture.registerFieldFilter(fieldFilter)
         }
 
         inline fun <reified C> commandHandler(commandHandler: MessageHandler<CommandMessage<*>>) {

@@ -18,8 +18,10 @@ class FixtureTest_Hierarchy {
 
     @Test
     fun testFixtureSetupWithAggregateHierarchy() {
-        AggregateTestFixture<AbstractAggregate>()
-                .registerAggregateFactory(object : AggregateFactory<AbstractAggregate> {
+        val aggregateTestFixture = AggregateTestFixture<AbstractAggregate>()
+        aggregateTestFixture {
+            register {
+                aggregateFactory = object : AggregateFactory<AbstractAggregate> {
                     override fun createAggregateRoot(aggregateIdentifier: String, firstEvent: DomainEventMessage<*>): AbstractAggregate {
                         return ConcreteAggregate()
                     }
@@ -27,9 +29,16 @@ class FixtureTest_Hierarchy {
                     override fun getAggregateType(): Class<AbstractAggregate> {
                         return AbstractAggregate::class.java
                     }
-                })
-                .given(MyEvent("123", 0)).whenever(TestCommand("123"))
-                .expectEvents(MyEvent("123", 1))
+                }
+            }
+            given {
+                events { +MyEvent("123", 0) }
+            }
+            whenever { TestCommand("123") }
+            expect {
+                events { +MyEvent("123", 1) }
+            }
+        }
     }
 
     internal abstract class AbstractAggregate {
