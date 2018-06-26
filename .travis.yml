@@ -14,7 +14,7 @@ jobs:
   include:
   - stage: snapshot
     script:
-    - "./gradlew artifactoryPublish --info"
+    - "./gradlew snapshot artifactoryPublish"
   - stage: release
     script:
-    - "./gradlew -Prelease.useLastTag=true final --info"
+    - "./gradlew -Prelease.useLastTag=true final"
