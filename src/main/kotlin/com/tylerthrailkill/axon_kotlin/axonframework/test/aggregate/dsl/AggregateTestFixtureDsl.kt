@@ -226,7 +226,7 @@ class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfigurat
             commandsBuilder.apply(builder).list
         }
 
-        fun withSuccessfulHandlerExecution() {
+        fun successfulHandlerExecution() {
             resultValidator.expectSuccessfulHandlerExecution()
         }
 

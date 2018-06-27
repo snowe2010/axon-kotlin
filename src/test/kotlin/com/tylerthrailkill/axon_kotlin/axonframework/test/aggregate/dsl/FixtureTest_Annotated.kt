@@ -49,7 +49,7 @@ class FixtureTest_Annotated {
                     }
                     expect {
                         events { +MyEvent("test", 1) }
-                        withSuccessfulHandlerExecution()
+                        successfulHandlerExecution()
                     }
                 }
 
