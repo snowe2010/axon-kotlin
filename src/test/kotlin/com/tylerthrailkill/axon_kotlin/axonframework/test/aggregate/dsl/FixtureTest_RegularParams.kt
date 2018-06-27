@@ -518,7 +518,7 @@ class FixtureTest_RegularParams {
                     events {
                         +MyEvent("aggregateId", 1)
                         +MyEvent("aggregateId", 2)
-                        MyEvent("aggregateId", 3)
+                        +MyEvent("aggregateId", 3)
                     }
                 }
                 whenever { StrangeCommand("aggregateId") }
