@@ -18,5 +18,7 @@ Also includes a DSL for easier writing FixtureConfiguration tests.
 
 * All fixture tests
 * Nice error messages when unary plus isn't used when it should be
+* Allow restarting dsl from arbitrary points in the chain, e.g. if you save the fixtureExecutionResult to a 
+  variable, then you should be able to invoke a new block on it and continue using the dsl
 
 ### Extensions
