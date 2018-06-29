@@ -39,8 +39,7 @@ class AnnotatedSagaTest {
         val fixture = SagaTestFixture<StubSaga>()
         val validator = fixture
                 .givenAggregate(aggregate1).published(
-                        GenericEventMessage.asEventMessage<TriggerSagaStartEvent>(TriggerSagaStartEvent(aggregate1)),
-                        TriggerExistingSagaEvent(aggregate1))
+                        GenericEventMessage.asEventMessage<TriggerSagaStartEvent>(TriggerSagaStartEvent(aggregate1)), TriggerExistingSagaEvent(aggregate1))
                 .andThenAggregate(aggregate2).published(TriggerSagaStartEvent(aggregate2))
                 .whenAggregate(aggregate1).publishes(TriggerSagaEndEvent(aggregate1))
 

@@ -1,7 +1,6 @@
 package com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl
 
 import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.AggregateTestFixture
-import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.extensions.*
 import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.extensions.CreateAggregateCommand
 import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.extensions.DeleteCommand
 import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.extensions.IllegalStateChangeCommand
@@ -9,6 +8,7 @@ import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.extensions.M
 import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.extensions.MyApplicationEvent
 import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.extensions.MyCommandHandler
 import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.extensions.MyEvent
+import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.extensions.MyOtherEvent
 import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.extensions.PublishEventCommand
 import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.extensions.StandardAggregate
 import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.extensions.StrangeCommand

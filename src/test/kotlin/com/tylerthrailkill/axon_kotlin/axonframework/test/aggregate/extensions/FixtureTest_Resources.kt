@@ -23,7 +23,7 @@ import kotlin.test.fail
  */
 class FixtureTest_Resources {
 
-    private var fixture: FixtureConfiguration<AggregateWithResources>? = null
+    private var fixture: AggregateTestFixture<AggregateWithResources>? = null
 
     @BeforeEach
     fun setUp() {

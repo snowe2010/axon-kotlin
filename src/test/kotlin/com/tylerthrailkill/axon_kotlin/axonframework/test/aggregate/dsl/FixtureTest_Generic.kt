@@ -1,6 +1,10 @@
 package com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl
 
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockito_kotlin.eq
+import com.nhaarman.mockito_kotlin.isA
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.whenever
 import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.AggregateTestFixture
 import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.whenever
 import org.axonframework.eventsourcing.AggregateFactory

@@ -9,7 +9,7 @@ package com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.extensions
 /*
 class FixtureTest_SpawningNewAggregate {
 
-    private lateinit var fixture: FixtureConfiguration<Aggregate1>
+    private lateinit var fixture: AggregateTestFixture<Aggregate1>
 
     @BeforeEach
     fun setUp() {

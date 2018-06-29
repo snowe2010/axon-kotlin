@@ -8,6 +8,7 @@ import org.axonframework.commandhandling.CommandMessage
 import org.axonframework.eventhandling.EventMessage
 import org.axonframework.messaging.MessageHandler
 import org.axonframework.test.AxonAssertionError
+import org.axonframework.test.aggregate.AggregateTestFixture
 import org.axonframework.test.aggregate.FixtureConfiguration
 import org.axonframework.test.matchers.Matchers.*
 import org.junit.jupiter.api.BeforeEach

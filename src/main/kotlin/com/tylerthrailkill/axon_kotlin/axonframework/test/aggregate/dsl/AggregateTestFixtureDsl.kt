@@ -10,6 +10,7 @@ import org.axonframework.messaging.MessageDispatchInterceptor
 import org.axonframework.messaging.MessageHandler
 import org.axonframework.messaging.MessageHandlerInterceptor
 import org.axonframework.messaging.MetaData
+import org.axonframework.test.aggregate.AggregateTestFixture
 import org.axonframework.test.aggregate.FixtureConfiguration
 import org.axonframework.test.aggregate.ResultValidator
 import org.axonframework.test.aggregate.TestExecutor

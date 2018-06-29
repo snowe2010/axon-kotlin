@@ -1,4 +1,4 @@
-package com.tylerthrailkill.axon_kotlin.axonframework.test.saga.extensions
+package com.tylerthrailkill.axon_kotlin.axonframework.test.saga.dsl
 
 
 import org.axonframework.commandhandling.GenericCommandMessage

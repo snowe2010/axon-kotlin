@@ -29,7 +29,7 @@ import kotlin.test.assertEquals
 
 class FixtureTest_CommandInterceptors {
 
-    private lateinit var fixture: FixtureConfiguration<InterceptorAggregate>
+    private lateinit var fixture: AggregateTestFixture<InterceptorAggregate>
 
     private val firstMockCommandDispatchInterceptor = mock<MessageDispatchInterceptor<CommandMessage<*>>>()
     private val secondMockCommandDispatchInterceptor = mock<MessageDispatchInterceptor<CommandMessage<*>>>()

@@ -8,6 +8,7 @@ import org.axonframework.messaging.MessageHandler
 import org.axonframework.messaging.unitofwork.CurrentUnitOfWork
 import org.axonframework.test.AxonAssertionError
 import org.axonframework.test.FixtureExecutionException
+import org.axonframework.test.aggregate.AggregateTestFixture
 import org.axonframework.test.aggregate.FixtureConfiguration
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -22,7 +23,7 @@ import kotlin.test.fail
 
 class FixtureTest_Annotated {
 
-    private lateinit var fixture: FixtureConfiguration<AnnotatedAggregate>
+    private lateinit var fixture: AggregateTestFixture<AnnotatedAggregate>
 
     @BeforeEach
     fun setUp() {
