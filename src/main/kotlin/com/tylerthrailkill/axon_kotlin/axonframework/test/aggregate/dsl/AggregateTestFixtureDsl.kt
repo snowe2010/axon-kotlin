@@ -10,7 +10,6 @@ import org.axonframework.messaging.MessageDispatchInterceptor
 import org.axonframework.messaging.MessageHandler
 import org.axonframework.messaging.MessageHandlerInterceptor
 import org.axonframework.messaging.MetaData
-import org.axonframework.test.aggregate.AggregateTestFixture
 import org.axonframework.test.aggregate.FixtureConfiguration
 import org.axonframework.test.aggregate.ResultValidator
 import org.axonframework.test.aggregate.TestExecutor
@@ -18,6 +17,13 @@ import org.axonframework.test.matchers.FieldFilter
 import org.hamcrest.Matcher
 
 
+/**
+ * Method for starting the axon-kotlin-test DSL
+ *
+ * @param init lambda to begin the dsl. Valid methods to call in the context of the lambda can be found in the
+ * AggregateTestFixtureBuilder class
+ * @return [AggregateTestFixtureBuilder] that allows retrieving any part of the [AggregateTestFixture] chain
+ */
 operator fun <T> FixtureConfiguration<T>.invoke(init: AggregateTestFixtureBuilder<T>.() -> Unit): AggregateTestFixtureBuilder<T> {
     val fixture = AggregateTestFixtureBuilder(this)
     fixture.init()
@@ -25,6 +31,8 @@ operator fun <T> FixtureConfiguration<T>.invoke(init: AggregateTestFixtureBuilde
 }
 
 /**
+ * Builder for the DSL. Declares all methods that can be called in the context
+ * of the Aggregate FixtureConfiguration DSL
  *
  * ```
  * fixture {
@@ -37,6 +45,8 @@ operator fun <T> FixtureConfiguration<T>.invoke(init: AggregateTestFixtureBuilde
  *     events = listOf(StubEvent)
  *   }
  * ```
+ *
+ * @param aggregateTestFixture takes in the [FixtureConfiguration] to build up
  */
 class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfiguration<T>) {
     var reportIllegalStateChange: Boolean = true
@@ -168,7 +178,7 @@ class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfigurat
 
     }
 
-    class GivenBuilder<T>(val aggregateTestFixture: FixtureConfiguration<T>) {
+    class GivenBuilder<T>(private val aggregateTestFixture: FixtureConfiguration<T>) {
         lateinit var testExecutor: TestExecutor
 
         fun initialize() {
@@ -194,9 +204,9 @@ class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfigurat
         }
     }
 
-    data class ExpectsBuilder(
-            val resultValidator: ResultValidator
-    ) {
+    class ExpectsBuilder(val resultValidator: ResultValidator) {
+        private val eventsBuilder: AnyUnaryBuilder = AnyUnaryBuilder()
+
         var returnValue: Any? = null
             set(value) {
                 resultValidator.expectReturnValue(value)
@@ -206,38 +216,23 @@ class AggregateTestFixtureBuilder<T>(val aggregateTestFixture: FixtureConfigurat
                 resultValidator.expectReturnValueMatching(value)
             }
         var noEvents: Boolean? = null
+            set(_) {
+                resultValidator.expectNoEvents()
+            }
         var eventsMatching: Matcher<out MutableList<in EventMessage<*>>>? = null
             set(value) {
                 resultValidator.expectEventsMatching(value)
             }
-        val eventsBuilder: AnyUnaryBuilder = AnyUnaryBuilder()
-        val commandsBuilder: AnyUnaryBuilder = AnyUnaryBuilder()
 
-        var commandsSet: Boolean = false
-        var eventsSet: Boolean = false
-
-        fun events(builder: AnyUnaryBuilder.() -> Unit) {
-            eventsSet = true
+        fun events(builder: AnyUnaryBuilder.() -> Unit): ResultValidator {
             val list: MutableList<Any> = eventsBuilder.apply(builder).list
-            resultValidator.expectEvents(*list.toTypedArray())
+            return resultValidator.expectEvents(*list.toTypedArray())
         }
 
-        fun commands(builder: AnyUnaryBuilder.() -> Unit) {
-            commandsSet = true
-            commandsBuilder.apply(builder).list
-        }
+        fun successfulHandlerExecution(): ResultValidator = resultValidator.expectSuccessfulHandlerExecution()
 
-        fun successfulHandlerExecution() {
-            resultValidator.expectSuccessfulHandlerExecution()
-        }
-
-        inline fun <reified T : Throwable> exception() {
-            resultValidator.expectException(T::class.java)
-        }
-
-        fun exception(matcher: Matcher<*>) {
-            resultValidator.expectException(matcher)
-        }
+        inline fun <reified T : Throwable> exception(): ResultValidator = resultValidator.expectException(T::class.java)
+        fun exception(matcher: Matcher<*>): ResultValidator = resultValidator.expectException(matcher)
     }
 
     class AnyUnaryBuilder {
