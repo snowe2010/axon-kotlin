@@ -1,0 +1,31 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>AggregateTestFixtureBuilder.whenever - axon-kotlin-test</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">axon-kotlin-test</a>&nbsp;/&nbsp;<a href="../index.html">com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl</a>&nbsp;/&nbsp;<a href="index.html">AggregateTestFixtureBuilder</a>&nbsp;/&nbsp;<a href="./whenever.html">whenever</a><br/>
+<br/>
+<h1>whenever</h1>
+<a name="com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.AggregateTestFixtureBuilder$whenever(kotlin.Function0((kotlin.Any)))"></a>
+<code><span class="keyword">fun </span><span class="identifier">whenever</span><span class="symbol">(</span><span class="identifier" id="com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.AggregateTestFixtureBuilder$whenever(kotlin.Function0((kotlin.Any)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">ResultValidator</span></code>
+<p>Takes a block for running a when situation against the <a href="#">FixtureConfiguration</a>.</p>
+<p>The block can be either just a Command, or a <a href="#">PairAny,MapString,Any</a></p>
+<pre><code class="lang-kotlin">val fixture = AggregateTestFixture&lt;StubAnnotatedAggregate&gt;()
+fixture {
+    whenever {
+    }
+}</code></pre><pre><code class="lang-kotlin">val fixture = AggregateTestFixture&lt;StubAnnotatedAggregate&gt;()
+fixture {
+    whenever {
+        CreateStubAggregateCommand(id)
+    }
+}</code></pre><pre><code class="lang-kotlin">val fixture = AggregateTestFixture&lt;StubAnnotatedAggregate&gt;()
+fixture {
+    whenever {
+        CreateStubAggregateCommand(id) to mapOf("String" to "anything")
+    }
+}</code></pre>
+</BODY>
+</HTML>

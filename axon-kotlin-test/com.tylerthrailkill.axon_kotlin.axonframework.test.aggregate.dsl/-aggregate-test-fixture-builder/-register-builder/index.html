@@ -1,0 +1,137 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>AggregateTestFixtureBuilder.RegisterBuilder - axon-kotlin-test</title>
+<link rel="stylesheet" href="../../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../../index.html">axon-kotlin-test</a>&nbsp;/&nbsp;<a href="../../index.html">com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl</a>&nbsp;/&nbsp;<a href="../index.html">AggregateTestFixtureBuilder</a>&nbsp;/&nbsp;<a href="./index.html">RegisterBuilder</a><br/>
+<br/>
+<h1>RegisterBuilder</h1>
+<code><span class="keyword">data</span> <span class="keyword">class </span><span class="identifier">RegisterBuilder</span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code>
+<p>Class that contains all methods that are valid for the <a href="../register.html">AggregateTestFixtureBuilder.register</a> block</p>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-register-command-dispatch-interceptor-builder/index.html">RegisterCommandDispatchInterceptorBuilder</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">RegisterCommandDispatchInterceptorBuilder</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="-register-command-handler-interceptor-builder/index.html">RegisterCommandHandlerInterceptorBuilder</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">RegisterCommandHandlerInterceptorBuilder</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="-register-field-filters-builder/index.html">RegisterFieldFiltersBuilder</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">RegisterFieldFiltersBuilder</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-init-.html">&lt;init&gt;</a></p>
+</td>
+<td>
+<code><span class="identifier">RegisterBuilder</span><span class="symbol">(</span><span class="identifier" id="com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.AggregateTestFixtureBuilder.RegisterBuilder$<init>(org.axonframework.test.aggregate.FixtureConfiguration((com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.AggregateTestFixtureBuilder.RegisterBuilder.T)))/aggregateTestFixture">aggregateTestFixture</span><span class="symbol">:</span>&nbsp;<span class="identifier">FixtureConfiguration</span><span class="symbol">&lt;</span><a href="index.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span><span class="symbol">)</span></code>
+<p>Class that contains all methods that are valid for the <a href="../register.html">AggregateTestFixtureBuilder.register</a> block</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="aggregate-factory.html">aggregateFactory</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">aggregateFactory</span><span class="symbol">: </span><span class="identifier">AggregateFactory</span><span class="symbol">&lt;</span><a href="index.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span><span class="symbol">?</span></code>
+<p>Aggregate factory has to be registered immediately else a repository might be set up before this is called</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="aggregate-test-fixture.html">aggregateTestFixture</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">aggregateTestFixture</span><span class="symbol">: </span><span class="identifier">FixtureConfiguration</span><span class="symbol">&lt;</span><a href="index.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="annotated-command-handler.html">annotatedCommandHandler</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">annotatedCommandHandler</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="repository.html">repository</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">repository</span><span class="symbol">: </span><span class="identifier">EventSourcingRepository</span><span class="symbol">&lt;</span><a href="index.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span><span class="symbol">?</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="command-dispatch-interceptors.html">commandDispatchInterceptors</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">commandDispatchInterceptors</span><span class="symbol">(</span><span class="identifier" id="com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.AggregateTestFixtureBuilder.RegisterBuilder$commandDispatchInterceptors(kotlin.Function1((com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.AggregateTestFixtureBuilder.RegisterBuilder.RegisterCommandDispatchInterceptorBuilder, kotlin.Unit)))/builder">builder</span><span class="symbol">:</span>&nbsp;<a href="-register-command-dispatch-interceptor-builder/index.html"><span class="identifier">RegisterCommandDispatchInterceptorBuilder</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="command-handler.html">commandHandler</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">C</span><span class="symbol">&gt;</span> <span class="identifier">commandHandler</span><span class="symbol">(</span><span class="identifier" id="com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.AggregateTestFixtureBuilder.RegisterBuilder$commandHandler(org.axonframework.messaging.MessageHandler((org.axonframework.commandhandling.CommandMessage((kotlin.Any)))))/commandHandler">commandHandler</span><span class="symbol">:</span>&nbsp;<span class="identifier">MessageHandler</span><span class="symbol">&lt;</span><span class="identifier">CommandMessage</span><span class="symbol">&lt;</span><span class="identifier">*</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code><br/>
+<code><span class="keyword">fun </span><span class="identifier">commandHandler</span><span class="symbol">(</span><span class="identifier" id="com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.AggregateTestFixtureBuilder.RegisterBuilder$commandHandler(kotlin.String, org.axonframework.messaging.MessageHandler((org.axonframework.commandhandling.CommandMessage((kotlin.Any)))))/commandName">commandName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.AggregateTestFixtureBuilder.RegisterBuilder$commandHandler(kotlin.String, org.axonframework.messaging.MessageHandler((org.axonframework.commandhandling.CommandMessage((kotlin.Any)))))/commandHandler">commandHandler</span><span class="symbol">:</span>&nbsp;<span class="identifier">MessageHandler</span><span class="symbol">&lt;</span><span class="identifier">CommandMessage</span><span class="symbol">&lt;</span><span class="identifier">*</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="command-handler-interceptors.html">commandHandlerInterceptors</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">commandHandlerInterceptors</span><span class="symbol">(</span><span class="identifier" id="com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.AggregateTestFixtureBuilder.RegisterBuilder$commandHandlerInterceptors(kotlin.Function1((com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.AggregateTestFixtureBuilder.RegisterBuilder.RegisterCommandHandlerInterceptorBuilder, kotlin.Unit)))/builder">builder</span><span class="symbol">:</span>&nbsp;<a href="-register-command-handler-interceptor-builder/index.html"><span class="identifier">RegisterCommandHandlerInterceptorBuilder</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="field-filter.html">fieldFilter</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">fieldFilter</span><span class="symbol">(</span><span class="identifier" id="com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.AggregateTestFixtureBuilder.RegisterBuilder$fieldFilter(org.axonframework.test.matchers.FieldFilter)/fieldFilter">fieldFilter</span><span class="symbol">:</span>&nbsp;<span class="identifier">FieldFilter</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="field-filters.html">fieldFilters</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">fieldFilters</span><span class="symbol">(</span><span class="identifier" id="com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.AggregateTestFixtureBuilder.RegisterBuilder$fieldFilters(kotlin.Function1((com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.AggregateTestFixtureBuilder.RegisterBuilder.RegisterFieldFiltersBuilder, kotlin.Unit)))/builder">builder</span><span class="symbol">:</span>&nbsp;<a href="-register-field-filters-builder/index.html"><span class="identifier">RegisterFieldFiltersBuilder</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="injectable-resources.html">injectableResources</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">injectableResources</span><span class="symbol">(</span><span class="identifier" id="com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.AggregateTestFixtureBuilder.RegisterBuilder$injectableResources(kotlin.Function1((com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.AggregateTestFixtureBuilder.AnyUnaryBuilder, kotlin.Unit)))/builder">builder</span><span class="symbol">:</span>&nbsp;<a href="../-any-unary-builder/index.html"><span class="identifier">AnyUnaryBuilder</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

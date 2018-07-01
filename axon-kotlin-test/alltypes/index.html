@@ -1,0 +1,88 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>alltypes - axon-kotlin-test</title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<h3>All Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="../com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate/org.axonframework.test.aggregate.-aggregate-test-fixture/index.html">org.axonframework.test.aggregate.AggregateTestFixture</a> (extensions in package com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate)</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<a href="../com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl/-aggregate-test-fixture-builder/index.html">com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.AggregateTestFixtureBuilder</a></td>
+<td>
+<p>Builder for the DSL. Declares all methods that can be called in the context
+of the Aggregate FixtureConfiguration DSL</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="../com.tylerthrailkill.axon_kotlin.axonframework.test.exceptions/-axon-kotlin-test-exception/index.html">com.tylerthrailkill.axon_kotlin.axonframework.test.exceptions.AxonKotlinTestException</a></td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<a href="../com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl/org.axonframework.test.aggregate.-fixture-configuration/index.html">org.axonframework.test.aggregate.FixtureConfiguration</a> (extensions in package com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl)</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<a href="../com.tylerthrailkill.axon_kotlin.axonframework.test.saga.dsl/org.axonframework.test.saga.-fixture-configuration/index.html">org.axonframework.test.saga.FixtureConfiguration</a> (extensions in package com.tylerthrailkill.axon_kotlin.axonframework.test.saga.dsl)</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<a href="../com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate/org.axonframework.test.aggregate.-result-validator/index.html">org.axonframework.test.aggregate.ResultValidator</a> (extensions in package com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate)</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<a href="../com.tylerthrailkill.axon_kotlin.axonframework.test.saga/org.axonframework.test.saga.-saga-test-fixture/index.html">org.axonframework.test.saga.SagaTestFixture</a> (extensions in package com.tylerthrailkill.axon_kotlin.axonframework.test.saga)</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<a href="../com.tylerthrailkill.axon_kotlin.axonframework.test.saga.dsl/-saga-test-fixture-builder/index.html">com.tylerthrailkill.axon_kotlin.axonframework.test.saga.dsl.SagaTestFixtureBuilder</a></td>
+<td>
+<pre><code>FixtureExecutionResult validator = fixture
+  .givenAggregate(aggregate1).published(
+      GenericEventMessage.asEventMessage(new TriggerSagaStartEvent(aggregate1)), new TriggerExistingSagaEvent(aggregate1))
+  .andThenAggregate(aggregate2).published(new TriggerSagaStartEvent(aggregate2))
+  .whenAggregate(aggregate1).publishes(new TriggerSagaEndEvent(aggregate1))
+
+  validator.expectActiveSagas(1)
+  validator.expectAssociationWith("identifier", aggregate2)
+  validator.expectNoAssociationWith("identifier", aggregate1)
+  validator.expectScheduledEventOfType(Duration.ofMinutes(10), TimerTriggeredEvent::class.java)
+  validator.expectScheduledEventMatching(Duration.ofMinutes(10), messageWithPayload(CoreMatchers.any(TimerTriggeredEvent::class.java)))
+  validator.expectScheduledEvent(Duration.ofMinutes(10), TimerTriggeredEvent(aggregate1))
+  validator.expectScheduledEventOfType(fixture.currentTime().plusSeconds(600), TimerTriggeredEvent::class.java)
+  validator.expectScheduledEventMatching(fixture.currentTime().plusSeconds(600), messageWithPayload(CoreMatchers.any(TimerTriggeredEvent::class.java)))
+  validator.expectScheduledEvent(fixture.currentTime().plusSeconds(600), TimerTriggeredEvent(aggregate1))
+  validator.expectDispatchedCommands()
+  validator.expectNoDispatchedCommands()
+  validator.expectPublishedEventsMatching(noEvents())
+</code></pre></td>
+</tr>
+<tr>
+<td>
+<a href="../com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate/org.axonframework.test.aggregate.-test-executor/index.html">org.axonframework.test.aggregate.TestExecutor</a> (extensions in package com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate)</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

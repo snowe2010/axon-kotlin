@@ -1,0 +1,150 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>AggregateTestFixtureBuilder - axon-kotlin-test</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">axon-kotlin-test</a>&nbsp;/&nbsp;<a href="../index.html">com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl</a>&nbsp;/&nbsp;<a href="./index.html">AggregateTestFixtureBuilder</a><br/>
+<br/>
+<h1>AggregateTestFixtureBuilder</h1>
+<code><span class="keyword">class </span><span class="identifier">AggregateTestFixtureBuilder</span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code>
+<p>Builder for the DSL. Declares all methods that can be called in the context
+of the Aggregate FixtureConfiguration DSL</p>
+<pre><code class="lang-kotlin">val fixture = AggregateTestFixture&lt;StubAnnotatedAggregate&gt;()</code></pre>
+<h3>Parameters</h3>
+<p><a name="aggregateTestFixture"></a>
+<code>aggregateTestFixture</code> - takes in the <a href="#">FixtureConfiguration</a> to build up</p>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-any-unary-builder/index.html">AnyUnaryBuilder</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">AnyUnaryBuilder</span></code>
+<p>Block type that allows building up lists of any items. For use only in DSL method blocks</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-expects-builder/index.html">ExpectsBuilder</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">ExpectsBuilder</span></code>
+<p>Contains all valid methods for the <a href="expect.html">AggregateTestFixtureBuilder.expect</a> block</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-given-builder/index.html">GivenBuilder</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">GivenBuilder</span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code>
+<p>Contains all valid methods for the <a href="given.html">AggregateTestFixtureBuilder.given</a> block
+Builds up a <a href="#">TestExecutor</a></p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-register-builder/index.html">RegisterBuilder</a></p>
+</td>
+<td>
+<code><span class="keyword">data</span> <span class="keyword">class </span><span class="identifier">RegisterBuilder</span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code>
+<p>Class that contains all methods that are valid for the <a href="register.html">AggregateTestFixtureBuilder.register</a> block</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-init-.html">&lt;init&gt;</a></p>
+</td>
+<td>
+<code><span class="identifier">AggregateTestFixtureBuilder</span><span class="symbol">(</span><span class="identifier" id="com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.AggregateTestFixtureBuilder$<init>(org.axonframework.test.aggregate.FixtureConfiguration((com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.AggregateTestFixtureBuilder.T)))/aggregateTestFixture">aggregateTestFixture</span><span class="symbol">:</span>&nbsp;<span class="identifier">FixtureConfiguration</span><span class="symbol">&lt;</span><a href="index.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span><span class="symbol">)</span></code>
+<p>Builder for the DSL. Declares all methods that can be called in the context
+of the Aggregate FixtureConfiguration DSL</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="report-illegal-state-change.html">reportIllegalStateChange</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">reportIllegalStateChange</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code>
+<p>Allows setting the fixture using <a href="#">FixtureConfiguration.setReportIllegalStateChange</a></p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="result-validator.html">resultValidator</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">resultValidator</span><span class="symbol">: </span><span class="identifier">ResultValidator</span></code>
+<p>Used for retrieving the instance of the ResultValidator for usage outside the bounds of the DSL</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="test-executor.html">testExecutor</a></p>
+</td>
+<td>
+<code><span class="keyword">lateinit</span> <span class="keyword">var </span><span class="identifier">testExecutor</span><span class="symbol">: </span><span class="identifier">TestExecutor</span></code>
+<p>Used for retrieving the instance of the TestExecutor for usage outside the bounds of the DSL</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="expect.html">expect</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">expect</span><span class="symbol">(</span><span class="identifier" id="com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.AggregateTestFixtureBuilder$expect(kotlin.Function1((com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.AggregateTestFixtureBuilder.ExpectsBuilder, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<a href="-expects-builder/index.html"><span class="identifier">ExpectsBuilder</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="-expects-builder/index.html"><span class="identifier">ExpectsBuilder</span></a></code>
+<p>Takes a block for running all expectations against the <a href="#">ResultValidator</a></p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="given.html">given</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">given</span><span class="symbol">(</span><span class="identifier" id="com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.AggregateTestFixtureBuilder$given(kotlin.Function1((com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.AggregateTestFixtureBuilder.GivenBuilder((com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.AggregateTestFixtureBuilder.T)), kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<a href="-given-builder/index.html"><span class="identifier">GivenBuilder</span></a><span class="symbol">&lt;</span><a href="index.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">TestExecutor</span></code>
+<p>Takes a block to build up all the 'given' information for the <a href="#">FixtureConfiguration</a>. Refer to <a href="-given-builder/index.html">GivenBuilder</a> for all valid
+methods in this block.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="register.html">register</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">register</span><span class="symbol">(</span><span class="identifier" id="com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.AggregateTestFixtureBuilder$register(kotlin.Function1((com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.AggregateTestFixtureBuilder.RegisterBuilder((com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.AggregateTestFixtureBuilder.T)), kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<a href="-register-builder/index.html"><span class="identifier">RegisterBuilder</span></a><span class="symbol">&lt;</span><a href="index.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="-register-builder/index.html"><span class="identifier">RegisterBuilder</span></a><span class="symbol">&lt;</span><a href="index.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span></code>
+<p>Registration block for the <a href="#">FixtureConfiguration</a>. Refer to <a href="-register-builder/index.html">RegisterBuilder</a> for all valid methods in this block.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="whenever.html">whenever</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">whenever</span><span class="symbol">(</span><span class="identifier" id="com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.AggregateTestFixtureBuilder$whenever(kotlin.Function0((kotlin.Any)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">ResultValidator</span></code>
+<p>Takes a block for running a when situation against the <a href="#">FixtureConfiguration</a>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>
