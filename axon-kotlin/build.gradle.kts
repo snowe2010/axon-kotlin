@@ -2,9 +2,8 @@ plugins {
     id("nebula.maven-publish")
     id("nebula.info")
     id("nebula.source-jar")
-//    id("nebula.javadoc-jar")
-//    id("nebula.nebula-bintray")
-    id("nebula.nebula-bintray-publishing") version("3.5.5")
+    id("nebula.javadoc-jar")
+    id("nebula.nebula-bintray-publishing")
     id("nebula.release")
     id("org.ajoberstar.github-pages")
 }
