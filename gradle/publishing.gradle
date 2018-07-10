@@ -8,6 +8,7 @@ bintray {
         userOrg = 'snowe'
         repo = 'maven'
         name = 'Axon-Kotlin'
+        desc = "Extensions to the Axon Framework "
         licenses = ['MIT']
         vcsUrl = 'https://github.com/snowe2010/axon-kotlin.git'
         websiteUrl = 'https://github.com/snowe2010/${project.name}'
