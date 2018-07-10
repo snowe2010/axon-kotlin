@@ -14,7 +14,7 @@ bintray {
         vcsUrl = 'https://github.com/snowe2010/${project.name}.git'
         labels = ['axon', 'kotlin']
     }
-    dryRun = true
+    dryRun = false
     publish = false
 }
 
