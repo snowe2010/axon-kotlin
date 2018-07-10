@@ -9,9 +9,10 @@ plugins {
     id 'nebula.release' version '6.3.5'
     id "org.ajoberstar.github-pages" version "1.7.2"
     id 'org.jbake.site' version '1.2.0'
+    id 'com.gradle.build-scan' version '1.15.1'
 }
 
-//apply from: 'publishing.gradle'
+//apply from: "$rootDir/gradle/publishing.gradle"
 
 group 'com.tylerthrailkill'
 
@@ -54,4 +55,10 @@ subprojects {
         }
     }
 
+}
+
+buildScan {
+    termsOfServiceUrl = 'https://gradle.com/terms-of-service'
+    termsOfServiceAgree = 'yes'
+    publishAlways()
 }
