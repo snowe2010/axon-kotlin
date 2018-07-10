@@ -1,12 +1,12 @@
 
 dokka {
-    inputs.files tasks.getByPath(":axon-kotlin-test:compileKotlin")
+    inputs.files tasks.getByPath(":axon-kotlin:compileKotlin")
     outputFormat = "html"
     outputDirectory = "$buildDir/dokka"
-    moduleName = "axon-kotlin-test"
+    moduleName = "axon-kotlin"
     jdkVersion = 8
     kotlinTasks {
-        [project(":axon-kotlin-test").compileKotlin]
+        [project(":axon-kotlin").compileKotlin]
     }
     samples = ["$rootDir/samples/src/test/kotlin"]
 }

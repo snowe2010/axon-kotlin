@@ -10,7 +10,7 @@ plugins {
 apply(from="$rootDir/gradle/site.gradle")
 
 dependencies {
-    implementation(project(":axon-kotlin-test"))
+    implementation(project(":axon-kotlin"))
     //    compile(kotlin("stdlib-jdk8"))
     testImplementation("org.springframework:spring-beans:4.3.11.RELEASE")
     testImplementation("javax.inject:javax.inject:1")
