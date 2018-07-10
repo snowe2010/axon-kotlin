@@ -1,0 +1,118 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>SagaTestFixtureBuilder.ExpectsBuilder - axon-kotlin</title>
+<link rel="stylesheet" href="../../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../../index.html">axon-kotlin</a>&nbsp;/&nbsp;<a href="../../index.html">com.tylerthrailkill.axon_kotlin.axonframework.test.saga.dsl</a>&nbsp;/&nbsp;<a href="../index.html">SagaTestFixtureBuilder</a>&nbsp;/&nbsp;<a href="./index.html">ExpectsBuilder</a><br/>
+<br/>
+<h1>ExpectsBuilder</h1>
+<code><span class="keyword">inner</span> <span class="keyword">class </span><span class="identifier">ExpectsBuilder</span></code>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-scheduled-event/index.html">ScheduledEvent</a></p>
+</td>
+<td>
+<code><span class="keyword">inner</span> <span class="keyword">class </span><span class="identifier">ScheduledEvent</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-init-.html">&lt;init&gt;</a></p>
+</td>
+<td>
+<code><span class="identifier">ExpectsBuilder</span><span class="symbol">(</span><span class="identifier" id="com.tylerthrailkill.axon_kotlin.axonframework.test.saga.dsl.SagaTestFixtureBuilder.ExpectsBuilder$<init>(org.axonframework.test.saga.FixtureExecutionResult)/fixtureExecutionResult">fixtureExecutionResult</span><span class="symbol">:</span>&nbsp;<span class="identifier">FixtureExecutionResult</span><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="active-sagas.html">activeSagas</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">activeSagas</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="fixture-execution-result.html">fixtureExecutionResult</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">fixtureExecutionResult</span><span class="symbol">: </span><span class="identifier">FixtureExecutionResult</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="associated-with.html">associatedWith</a></p>
+</td>
+<td>
+<code><span class="keyword">infix</span> <span class="keyword">fun </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">.</span><span class="identifier">associatedWith</span><span class="symbol">(</span><span class="identifier" id="com.tylerthrailkill.axon_kotlin.axonframework.test.saga.dsl.SagaTestFixtureBuilder.ExpectsBuilder$associatedWith(kotlin.String, kotlin.Any)/thing">thing</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="dispatched-commands.html">dispatchedCommands</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">dispatchedCommands</span><span class="symbol">(</span><span class="identifier" id="com.tylerthrailkill.axon_kotlin.axonframework.test.saga.dsl.SagaTestFixtureBuilder.ExpectsBuilder$dispatchedCommands(kotlin.Function1((com.tylerthrailkill.axon_kotlin.axonframework.test.saga.dsl.SagaTestFixtureBuilder.AnyUnaryBuilder, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<a href="../-any-unary-builder/index.html"><span class="identifier">AnyUnaryBuilder</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="no-dispatched-commands.html">noDispatchedCommands</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">noDispatchedCommands</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="no-scheduled-events.html">noScheduledEvents</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">noScheduledEvents</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="not-associated-with.html">notAssociatedWith</a></p>
+</td>
+<td>
+<code><span class="keyword">infix</span> <span class="keyword">fun </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">.</span><span class="identifier">notAssociatedWith</span><span class="symbol">(</span><span class="identifier" id="com.tylerthrailkill.axon_kotlin.axonframework.test.saga.dsl.SagaTestFixtureBuilder.ExpectsBuilder$notAssociatedWith(kotlin.String, kotlin.Any)/thing">thing</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="published-events.html">publishedEvents</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">publishedEvents</span><span class="symbol">(</span><span class="identifier" id="com.tylerthrailkill.axon_kotlin.axonframework.test.saga.dsl.SagaTestFixtureBuilder.ExpectsBuilder$publishedEvents(kotlin.Function1((com.tylerthrailkill.axon_kotlin.axonframework.test.saga.dsl.SagaTestFixtureBuilder.AnyUnaryBuilder, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<a href="../-any-unary-builder/index.html"><span class="identifier">AnyUnaryBuilder</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="published-events-matching.html">publishedEventsMatching</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">publishedEventsMatching</span><span class="symbol">(</span><span class="identifier" id="com.tylerthrailkill.axon_kotlin.axonframework.test.saga.dsl.SagaTestFixtureBuilder.ExpectsBuilder$publishedEventsMatching(org.hamcrest.Matcher((kotlin.collections.MutableList((org.axonframework.eventhandling.EventMessage((kotlin.Any)))))))/matcher">matcher</span><span class="symbol">:</span>&nbsp;<span class="identifier">Matcher</span><span class="symbol">&lt;</span><span class="keyword">out</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html"><span class="identifier">MutableList</span></a><span class="symbol">&lt;</span><span class="keyword">in</span>&nbsp;<span class="identifier">EventMessage</span><span class="symbol">&lt;</span><span class="identifier">*</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="scheduled-event.html">scheduledEvent</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">scheduledEvent</span><span class="symbol">(</span><span class="identifier" id="com.tylerthrailkill.axon_kotlin.axonframework.test.saga.dsl.SagaTestFixtureBuilder.ExpectsBuilder$scheduledEvent(java.time.Duration)/duration">duration</span><span class="symbol">:</span>&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/time/Duration.html"><span class="identifier">Duration</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="-scheduled-event/index.html"><span class="identifier">ScheduledEvent</span></a></code><br/>
+<code><span class="keyword">fun </span><span class="identifier">scheduledEvent</span><span class="symbol">(</span><span class="identifier" id="com.tylerthrailkill.axon_kotlin.axonframework.test.saga.dsl.SagaTestFixtureBuilder.ExpectsBuilder$scheduledEvent(java.time.Instant)/instant">instant</span><span class="symbol">:</span>&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/time/Instant.html"><span class="identifier">Instant</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="-scheduled-event/index.html"><span class="identifier">ScheduledEvent</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

@@ -1,0 +1,85 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>SagaTestFixtureBuilder.GivenBuilder - axon-kotlin</title>
+<link rel="stylesheet" href="../../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../../index.html">axon-kotlin</a>&nbsp;/&nbsp;<a href="../../index.html">com.tylerthrailkill.axon_kotlin.axonframework.test.saga.dsl</a>&nbsp;/&nbsp;<a href="../index.html">SagaTestFixtureBuilder</a>&nbsp;/&nbsp;<a href="./index.html">GivenBuilder</a><br/>
+<br/>
+<h1>GivenBuilder</h1>
+<code><span class="keyword">inner</span> <span class="keyword">class </span><span class="identifier">GivenBuilder</span></code>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-init-.html">&lt;init&gt;</a></p>
+</td>
+<td>
+<code><span class="identifier">GivenBuilder</span><span class="symbol">(</span><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="continued-given-state.html">continuedGivenState</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">continuedGivenState</span><span class="symbol">: </span><span class="identifier">ContinuedGivenState</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="current-time.html">currentTime</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">currentTime</span><span class="symbol">(</span><span class="identifier" id="com.tylerthrailkill.axon_kotlin.axonframework.test.saga.dsl.SagaTestFixtureBuilder.GivenBuilder$currentTime(java.time.Instant)/currentTime">currentTime</span><span class="symbol">:</span>&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/time/Instant.html"><span class="identifier">Instant</span></a><span class="symbol">?</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="no-prior-activity.html">noPriorActivity</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">noPriorActivity</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="published.html">published</a></p>
+</td>
+<td>
+<code><span class="keyword">infix</span> <span class="keyword">fun </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">.</span><span class="identifier">published</span><span class="symbol">(</span><span class="identifier" id="com.tylerthrailkill.axon_kotlin.axonframework.test.saga.dsl.SagaTestFixtureBuilder.GivenBuilder$published(kotlin.String, kotlin.Function1((com.tylerthrailkill.axon_kotlin.axonframework.test.saga.dsl.SagaTestFixtureBuilder.AnyUnaryBuilder, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<a href="../-any-unary-builder/index.html"><span class="identifier">AnyUnaryBuilder</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code><br/>
+<code><span class="keyword">infix</span> <span class="keyword">fun </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">.</span><span class="identifier">published</span><span class="symbol">(</span><span class="identifier" id="com.tylerthrailkill.axon_kotlin.axonframework.test.saga.dsl.SagaTestFixtureBuilder.GivenBuilder$published(kotlin.String, kotlin.Any)/event">event</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="published-in-order.html">publishedInOrder</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">publishedInOrder</span><span class="symbol">(</span><span class="identifier" id="com.tylerthrailkill.axon_kotlin.axonframework.test.saga.dsl.SagaTestFixtureBuilder.GivenBuilder$publishedInOrder(kotlin.Function1((com.tylerthrailkill.axon_kotlin.axonframework.test.saga.dsl.SagaTestFixtureBuilder.AnyUnaryBuilder, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<a href="../-any-unary-builder/index.html"><span class="identifier">AnyUnaryBuilder</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="then-time-advances-to.html">thenTimeAdvancesTo</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">thenTimeAdvancesTo</span><span class="symbol">(</span><span class="identifier" id="com.tylerthrailkill.axon_kotlin.axonframework.test.saga.dsl.SagaTestFixtureBuilder.GivenBuilder$thenTimeAdvancesTo(java.time.Instant)/newDateTime">newDateTime</span><span class="symbol">:</span>&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/time/Instant.html"><span class="identifier">Instant</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="then-time-elapses.html">thenTimeElapses</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">thenTimeElapses</span><span class="symbol">(</span><span class="identifier" id="com.tylerthrailkill.axon_kotlin.axonframework.test.saga.dsl.SagaTestFixtureBuilder.GivenBuilder$thenTimeElapses(java.time.Duration)/elapsedTime">elapsedTime</span><span class="symbol">:</span>&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/time/Duration.html"><span class="identifier">Duration</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>
