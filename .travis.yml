@@ -7,7 +7,7 @@ before_install:
 stages:
   - name: test
   - name: release
-    if: branch = master AND tag IS present
+    if: tag IS present
 
 jobs:
   include:
@@ -16,4 +16,4 @@ jobs:
     - ./gradlew test
   - stage: release
     script:
-    - "./gradlew -Prelease.useLastTag=true final --info"
+    - ./gradlew -Prelease.useLastTag=true final --info
