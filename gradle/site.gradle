@@ -1,0 +1,31 @@
+
+dokka {
+    inputs.files tasks.getByPath(":axon-kotlin-test:compileKotlin")
+    outputFormat = "html"
+    outputDirectory = "$buildDir/dokka"
+    moduleName = "axon-kotlin-test"
+    jdkVersion = 8
+    kotlinTasks {
+        [project(":axon-kotlin-test").compileKotlin]
+    }
+    samples = ["$rootDir/samples/src/test/kotlin"]
+}
+
+task copyApiDocs(type: Copy) {
+    dependsOn("dokka")
+    from file("src/assets/index.html")
+    into("$buildDir/dokka")
+}
+
+githubPages {
+    repoUri = 'git@github.com:snowe2010/axon-kotlin.git' // defaults to this project's origin URI
+    pages {
+//        from "axon-kotlin/test/build/javadoc/axon-kotlin-test"
+        from "$buildDir/dokka/"
+        // by default this will copy into the root of the gh-pages branch and delete any previous files
+        // customizing the destination will only delete files within that target dir
+//        into "docs/${version}"
+    }
+}
+
+prepareGhPages.dependsOn("copyApiDocs")

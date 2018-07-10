@@ -1,5 +1,13 @@
 plugins {
-    id("org.jetbrains.dokka")// version "0.9.17"
+    id("org.jetbrains.dokka")
+    id("nebula.kotlin")
+    id("nebula.maven-publish")
+    id("nebula.info")
+    id("nebula.source-jar")
+    id("nebula.javadoc-jar")
+    id("nebula.nebula-bintray-publishing")
+    id("nebula.release")
+    id("org.ajoberstar.github-pages")
 }
 apply(from = "$rootDir/gradle/dokka.gradle")
 
