@@ -5,19 +5,24 @@ before_install:
   - chmod +x gradlew
 
 stages:
-  - name: snapshot
-    if: branch = master AND tag IS NOT present
+  - name: test
+#  - name: documentation
+#  - name: snapshot
+#    if: branch = master AND tag IS NOT present
   - name: release
     if: branch = master AND tag IS present
 
 jobs:
   include:
-  - stage: documentation
-    script:
-    - ./gradlew publishGhPages
-  - stage: snapshot
+  - stage: test
     script:
     - ./gradlew test
+#  - stage: documentation
+#    script:
+#    - ./gradlew publishGhPages
+#  - stage: snapshot
+#    script:
+#    - ./gradlew test
   - stage: release
     script:
     - "./gradlew -Prelease.useLastTag=true final --info"
