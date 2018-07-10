@@ -12,9 +12,12 @@ stages:
 
 jobs:
   include:
+  - stage: documentation
+    script:
+    - ./gradlew publishGhPages
   - stage: snapshot
     script:
-    - "./gradlew snapshot artifactoryPublish --info"
+    - ./gradlew test
   - stage: release
     script:
     - "./gradlew -Prelease.useLastTag=true final --info"

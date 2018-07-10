@@ -1,3 +1,5 @@
+apply plugin: 'nebula.release'
+
 bintray {
     user = findProperty('bintrayUser') ?: System.getenv('BINTRAY_USER')
     key = findProperty('bintrayKey') ?: System.getenv('BINTRAY_KEY')

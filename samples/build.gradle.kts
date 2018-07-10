@@ -1,14 +1,3 @@
-plugins {
-    id("org.jetbrains.dokka")
-    id("nebula.kotlin")
-    id("nebula.source-jar")
-    id("nebula.javadoc-jar")
-    id("org.jbake.site")
-    id("org.ajoberstar.github-pages")
-}
-
-apply(from="$rootDir/gradle/site.gradle")
-
 dependencies {
     implementation(project(":axon-kotlin"))
     //    compile(kotlin("stdlib-jdk8"))

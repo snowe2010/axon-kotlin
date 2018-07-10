@@ -4,14 +4,16 @@ import com.nhaarman.mockito_kotlin.any
 import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.AggregateTestFixture
 import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.AggregateTestFixtureBuilder
 import com.tylerthrailkill.axon_kotlin.axonframework.test.aggregate.dsl.invoke
-import org.hamcrest.Matcher
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Test
 import java.util.*
 
 /**
  * @author Tyler Thrailkill
  */
 
+// don't actually run these. they're just examples of usage.
+@Disabled
 class SamplesTest {
 
     val id: UUID = UUID.randomUUID()
@@ -97,6 +99,7 @@ class SamplesTest {
     fun expectShowAllMethodsExample() {
         val fixture = AggregateTestFixture<StubAnnotatedAggregate>()
         fixture {
+            whenever {} // must have whenever before expect
             expect {
                 returnValue = ""
                 returnValueMatching = any()

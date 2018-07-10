@@ -1,6 +1,4 @@
 plugins {
-    id("org.jetbrains.dokka")
-    id("nebula.kotlin")
     id("nebula.maven-publish")
     id("nebula.info")
     id("nebula.source-jar")
@@ -12,6 +10,7 @@ plugins {
 
 apply(from = "$rootDir/gradle/dokka.gradle")
 apply(from = "$rootDir/gradle/publishing.gradle")
+apply(from = "$rootDir/gradle/site.gradle")
 
 dependencies {
     testImplementation("org.springframework:spring-beans:4.3.11.RELEASE")
