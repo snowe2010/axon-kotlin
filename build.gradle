@@ -14,10 +14,10 @@ plugins {
 
 //apply from: "$rootDir/gradle/publishing.gradle"
 
-group 'com.tylerthrailkill'
-description "Extensions to the Axon Framework"
 
 allprojects {
+    group 'com.tylerthrailkill'
+    description "Extensions to the Axon Framework"
     repositories {
         mavenCentral()
         mavenLocal()

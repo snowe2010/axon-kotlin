@@ -1,3 +1,7 @@
+import nebula.plugin.contacts.Contact
+import nebula.plugin.contacts.ContactsExtension
+import nebula.plugin.contacts.ContactsPlugin
+
 plugins {
     id("nebula.maven-publish")
     id("nebula.info")
@@ -6,7 +10,25 @@ plugins {
     id("nebula.nebula-bintray-publishing")
     id("nebula.release")
     id("org.ajoberstar.github-pages")
+    id("nebula.contacts-pom") version("2.2.2")
 }
+//apply(plugin = "nebula.contacts-base")
+//apply(plugin = "contacts-pom")
+//apply(plugin = "nebula-maven-publish")
+
+//ContactsPlugin().
+//contacts(Contact::class) {
+//    "tyler.b.thrailkill@gmail.com" {
+//        moniker = "Tyler Thrailkill"
+//        role = "owner"
+//    }
+//}
+//ContactsExtension(LinkedHashMap<String, Contact>()).methodMissing("contacts") //{
+//    "tyler.b.thrailkill@gmail.com" {
+//        moniker = "Tyler Thrailkill"
+//        role = "owner"
+//    }
+//}
 
 apply(from = "$rootDir/gradle/dokka.gradle")
 apply(from = "$rootDir/gradle/publishing.gradle")
