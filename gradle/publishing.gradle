@@ -18,6 +18,7 @@ bintray {
     publish = true
 }
 
+/*
 artifactory {
     contextUrl = 'http://oss.jfrog.org'
     publish {
@@ -37,3 +38,4 @@ artifactory {
     }
     clientConfig.info.setBuildNumber('' + new Random(System.currentTimeMillis()).nextInt(20000))
 }
+*/
