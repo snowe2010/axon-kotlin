@@ -1,9 +1,6 @@
 apply plugin: 'nebula.release'
 apply plugin: 'nebula.contacts-base'
 apply plugin: 'contacts-pom'
-//apply plugin: 'nebula-maven-publishing'
-//description "Extensions to the Axon Framework"
-//projects.description "Extensions to the Axon Framework"
 
 contacts {
     "tyler.b.thrailkill@gmail.com" {
