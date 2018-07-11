@@ -1,11 +1,26 @@
 apply plugin: 'nebula.release'
 apply plugin: 'nebula.contacts-base'
 apply plugin: 'contacts-pom'
+apply plugin: 'nebula.maven-publish'
 
 contacts {
     "tyler.b.thrailkill@gmail.com" {
         moniker = "Tyler Thrailkill"
         role("owner")
+    }
+}
+
+publishing {
+    publications {
+        nebula(MavenPublication) {
+            pom.licenses {
+                license {
+                    name = 'The MIT License'
+                    url = 'https://opensource.org/licenses/MIT'
+                    distribution = 'repo'
+                }
+            }
+        }
     }
 }
 
