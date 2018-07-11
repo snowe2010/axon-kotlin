@@ -1,12 +1,11 @@
 plugins {
     id "org.jetbrains.dokka" version "0.9.17"
     id 'nebula.kotlin' version '1.2.50'
-    id 'nebula.maven-publish' version '8.0.0'
+//    id 'nebula.maven-publish' version '8.0.0'
     id 'nebula.info' version '3.7.1'
-    id "nebula.source-jar" version "8.0.0"
+//    id "nebula.source-jar" version "8.0.0"
 //    id "nebula.javadoc-jar" version "8.0.0"
-    id 'nebula.nebula-bintray-publishing' version '3.5.5'
-    id 'nebula.release' version '6.3.5'
+//    id 'nebula.nebula-bintray-publishing' version '3.5.5'
     id "org.ajoberstar.github-pages" version "1.7.2"
     id 'org.jbake.site' version '1.2.0'
     id 'com.gradle.build-scan' version '1.15.1'
