@@ -27,6 +27,7 @@ publishing {
 bintray {
     user = findProperty('bintrayUser') ?: System.getenv('BINTRAY_USER')
     key = findProperty('bintrayKey') ?: System.getenv('BINTRAY_KEY')
+    override = true
 
     pkg {
         userOrg = 'snowe'
