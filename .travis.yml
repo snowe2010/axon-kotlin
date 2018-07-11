@@ -16,4 +16,4 @@ jobs:
     - ./gradlew test
   - stage: release
     script:
-    - ./gradlew -Prelease.useLastTag=true final --info
+    - ./gradlew -Prelease.useLastTag=true final --info --stacktrace

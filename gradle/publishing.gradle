@@ -39,6 +39,12 @@ bintray {
         issueTrackerUrl = 'https://github.com/snowe2010/${project.name}/issues'
         vcsUrl = 'https://github.com/snowe2010/${project.name}.git'
         labels = ['axon', 'kotlin']
+        version {
+            gpg {
+                sign = true
+                passphrase = findProperty('gpgPassphrase') ?: System.getenv('GPG_PASSPHRASE')
+            }
+        }
     }
     dryRun = false
     publish = true
