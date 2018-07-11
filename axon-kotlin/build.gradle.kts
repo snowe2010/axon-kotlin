@@ -6,7 +6,7 @@ plugins {
     id("nebula.nebula-bintray-publishing") version("3.5.5")
     id("nebula.release")
     id("org.ajoberstar.github-pages")
-    id("nebula.contacts-pom") version("2.2.2")
+//    id("nebula.contacts-pom") version("2.2.2")
 }
 
 apply(from = "$rootDir/gradle/dokka.gradle")
