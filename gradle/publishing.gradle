@@ -42,6 +42,8 @@ bintray {
         version {
             gpg {
                 sign = true
+                println('passphrase')
+                println(findProperty('gpgPassphrase'))
                 passphrase = findProperty('gpgPassphrase') ?: System.getenv('GPG_PASSPHRASE')
             }
         }
