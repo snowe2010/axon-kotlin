@@ -30,7 +30,6 @@ subprojects {
     apply plugin: "nebula.kotlin"
 //    apply plugin: "maven-publish"
     apply plugin: "org.jetbrains.dokka"
-    apply plugin: "nebula.kotlin"
 
     dependencies {
         compile group: "org.axonframework", name: "axon-core", version: axonVersion

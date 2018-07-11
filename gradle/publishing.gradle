@@ -1,4 +1,4 @@
-apply plugin: 'nebula.release'
+//apply plugin: 'nebula.release'
 apply plugin: 'nebula.contacts-base'
 apply plugin: 'contacts-pom'
 apply plugin: 'nebula.maven-publish'
@@ -42,8 +42,6 @@ bintray {
         version {
             gpg {
                 sign = true
-                println('passphrase')
-                println(findProperty('gpgPassphrase'))
                 passphrase = findProperty('gpgPassphrase') ?: System.getenv('GPG_PASSPHRASE')
             }
         }
