@@ -4,7 +4,7 @@ plugins {
     id("nebula.source-jar") version("8.0.0")
     id("nebula.javadoc-jar") version("8.0.0")
     id("nebula.nebula-bintray-publishing") version("3.5.5")
-    id("nebula.release") version("6.3.5")
+    id("nebula.release")
     id("org.ajoberstar.github-pages")
     id("nebula.contacts-pom") version("2.2.2")
 }
