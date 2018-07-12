@@ -1,5 +1,5 @@
 dependencies {
-    implementation(project(":axon-kotlin"))
+    implementation(project(":axon-kotlin-test"))
     //    compile(kotlin("stdlib-jdk8"))
     testImplementation("org.springframework:spring-beans:4.3.11.RELEASE")
     testImplementation("javax.inject:javax.inject:1")
