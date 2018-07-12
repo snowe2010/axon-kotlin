@@ -1,3 +1,3 @@
 rootProject.name = 'axon-kotlin'
-include 'axon-kotlin', 'samples'
+include 'axon-kotlin-test', 'samples'
 
