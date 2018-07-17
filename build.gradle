@@ -27,6 +27,7 @@ allprojects {
 def axonVersion = '3.2.2'
 
 subprojects {
+    apply plugin: 'nebula.release'
     apply plugin: "nebula.kotlin"
     apply plugin: "maven-publish"
     apply plugin: "org.jetbrains.dokka"
