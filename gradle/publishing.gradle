@@ -2,12 +2,14 @@ apply plugin: 'nebula.release'
 apply plugin: 'nebula.contacts'
 apply plugin: 'nebula.maven-publish'
 apply plugin: 'nebula.source-jar'
-apply plugin: "nebula.nebula-bintray-publishing"
+apply plugin: 'nebula.nebula-bintray'
+apply plugin: 'nebula.info-scm'
 
 contacts {
-    "tyler.b.thrailkill@gmail.com" {
-        moniker = "Tyler Thrailkill"
-        role("owner")
+    'tyler.b.thrailkill@gmail.com' {
+        github 'snowe2010'
+        moniker = 'Tyler Thrailkill'
+        role 'owner'
     }
 }
 
@@ -34,7 +36,7 @@ bintray {
         userOrg = 'snowe'
         repo = 'maven'
         name = 'Axon-Kotlin'
-        desc = "Extensions to the Axon Framework "
+        desc = 'Extensions to the Axon Framework'
         licenses = ['MIT']
         vcsUrl = 'https://github.com/snowe2010/axon-kotlin.git'
         websiteUrl = 'https://github.com/snowe2010/${project.name}'
@@ -52,7 +54,6 @@ bintray {
     publish = true
 }
 
-/*
 artifactory {
     contextUrl = 'http://oss.jfrog.org'
     publish {
@@ -72,4 +73,3 @@ artifactory {
     }
     clientConfig.info.setBuildNumber('' + new Random(System.currentTimeMillis()).nextInt(20000))
 }
-*/

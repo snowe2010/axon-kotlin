@@ -14,15 +14,19 @@ buildscript {
         classpath "org.jbake:jbake-gradle-plugin:1.2.0"
         classpath "org.ajoberstar:gradle-git:1.7.2"
         classpath "com.netflix.nebula:gradle-contacts-plugin:3.0.1"
-
+        classpath 'com.netflix.nebula:gradle-info-plugin:3.+'
     }
 }
 
 allprojects {
     apply plugin: 'nebula.release'
+
+    release {
+        // Let the default versioning strategy be the maven style -SNAPSHOT, instead of nebula's devSnapshot
+        defaultVersionStrategy = Strategies.SNAPSHOT
+    }
     group 'com.tylerthrailkill'
     description "Extensions to the Axon Framework"
-
 }
 
 subprojects {
