@@ -1,3 +1,36 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    def axonVersion = '3.2.2'
+    dependencies {
+        classpath "com.netflix.nebula:nebula-kotlin-plugin:1.2.51"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.17"
+        classpath "gradle.plugin.org.jmailen.gradle:kotlinter-gradle:1.12.0"
+        classpath "com.netflix.nebula:nebula-release-plugin:6.3.5"
+        classpath "com.netflix.nebula:nebula-publishing-plugin:8.1.2"
+        classpath "com.netflix.nebula:nebula-bintray-plugin:3.5.5"
+        classpath "com.ferranpons:twitter-gradle-plugin:1.0.2"
+        classpath "org.jbake:jbake-gradle-plugin:1.2.0"
+        classpath "org.ajoberstar:gradle-git:1.7.2"
+
+
+        compile group: "org.axonframework", name: "axon-core", version: axonVersion
+        compile group: "org.axonframework", name: "axon-test", version: axonVersion
+        compile group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
+
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.0.3'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.0.3'
+        testCompile group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
+        testCompile "com.nhaarman:mockito-kotlin:1.5.0"
+
+        testCompile "org.jetbrains.kotlin:kotlin-test:1.2.41"
+        testCompile group: "org.axonframework", name: "axon-core", version: axonVersion
+        testCompile group: "org.axonframework", name: "axon-test", version: axonVersion
+    }
+}
+
 plugins {
     id "org.jetbrains.dokka" version "0.9.17"
     id 'nebula.kotlin' version '1.2.50'
@@ -12,53 +45,40 @@ plugins {
     id 'com.gradle.build-scan' version '1.15.1'
 }
 
-//apply from: "$rootDir/gradle/publishing.gradle"
-group 'com.tylerthrailkill'
-description "Extensions to the Axon Framework"
-
 allprojects {
+    apply plugin: 'nebula.release'
     group 'com.tylerthrailkill'
     description "Extensions to the Axon Framework"
+
+}
+
+subprojects {
+    apply plugin: "nebula.kotlin"
+    apply plugin: "maven-publish"
+}
+
+
+subprojects {
     repositories {
         mavenCentral()
         mavenLocal()
-    }
-}
-def axonVersion = '3.2.2'
-
-subprojects {
-    apply plugin: 'nebula.release'
-    apply plugin: "nebula.kotlin"
-    apply plugin: "maven-publish"
-    apply plugin: "org.jetbrains.dokka"
-
-    dependencies {
-        compile group: "org.axonframework", name: "axon-core", version: axonVersion
-        compile group: "org.axonframework", name: "axon-test", version: axonVersion
-        compile group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
-
-        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.0.3'
-        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.0.3'
-        testCompile group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
-        testCompile "com.nhaarman:mockito-kotlin:1.5.0"
-
-        testCompile "org.jetbrains.kotlin:kotlin-test:1.2.41"
-        testCompile group: "org.axonframework", name: "axon-core", version: axonVersion
-        testCompile group: "org.axonframework", name: "axon-test", version: axonVersion
+        jcenter()
     }
 
-    test {
-        useJUnitPlatform()
-
-        // Always run tests, even when nothing changed.
-        dependsOn 'cleanTest'
-
-        // Show test results.
-        testLogging {
-            events "passed", "skipped", "failed"
+    configurations {
+        compileClasspath {
+            resolutionStrategy.activateDependencyLocking()
+        }
+        runtimeClasspath {
+            resolutionStrategy.activateDependencyLocking()
+        }
+        testCompileClasspath {
+            resolutionStrategy.activateDependencyLocking()
+        }
+        testRuntimeClasspath {
+            resolutionStrategy.activateDependencyLocking()
         }
     }
-
 }
 
 buildScan {

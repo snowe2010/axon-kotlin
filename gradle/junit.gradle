@@ -1,0 +1,16 @@
+dependencies {
+    // enables running in IntelliJ using JUnit runner
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher:+"
+}
+
+test {
+    useJUnitPlatform()
+
+    // Always run tests, even when nothing changed.
+    dependsOn 'cleanTest'
+
+    // Show test results.
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
