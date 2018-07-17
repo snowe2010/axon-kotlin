@@ -73,3 +73,56 @@ artifactory {
     }
     clientConfig.info.setBuildNumber('' + new Random(System.currentTimeMillis()).nextInt(20000))
 }
+
+
+
+
+
+
+
+import com.jfrog.bintray.gradle.BintrayExtension
+import com.jfrog.bintray.gradle.tasks.BintrayUploadTask
+import com.jfrog.bintray.gradle.tasks.BintrayPublishTask
+import nebula.plugin.bintray.BintrayPlugin
+import nebula.plugin.info.scm.ScmInfoExtension
+import org.gradle.api.Plugin
+import org.gradle.api.Project
+import org.gradle.api.Task
+import org.gradle.api.execution.TaskExecutionGraph
+import org.gradle.api.tasks.Upload
+import org.jfrog.gradle.plugin.artifactory.task.ArtifactoryTask
+import org.jfrog.gradle.plugin.artifactory.task.DeployTask
+
+
+
+
+boolean dryRun = project.hasProperty('dryRun') && project.property('dryRun') as Boolean
+def disable = {
+    it.enabled = !dryRun
+}
+
+def runOnlyForCandidateAndFinal = { Task task ->
+    project.gradle.taskGraph.whenReady { TaskExecutionGraph graph ->
+        task.onlyIf {
+            graph.hasTask(':final') || graph.hasTask(':candidate')
+        }
+    }
+}
+
+project.plugins.apply org.gradle.api.publish.plugins.PublishingPlugin
+project.plugins.apply BintrayPlugin
+project.tasks.withType(BintrayUploadTask, disable)
+project.tasks.withType(BintrayUploadTask, runOnlyForCandidateAndFinal)
+project.tasks.withType(BintrayPublishTask, disable)
+project.tasks.withType(BintrayPublishTask, runOnlyForCandidateAndFinal)
+project.tasks.withType(Upload, disable)
+project.tasks.withType(ArtifactoryTask, disable)
+def runOnlyForSnapshots = { Task task ->
+    project.gradle.taskGraph.whenReady { TaskExecutionGraph graph ->
+        task.onlyIf {
+            graph.hasTask(':snapshot') || graph.hasTask(':devSnapshot')
+        }
+    }
+}
+project.tasks.withType(ArtifactoryTask, runOnlyForSnapshots)
+project.tasks.withType(DeployTask, runOnlyForSnapshots)
