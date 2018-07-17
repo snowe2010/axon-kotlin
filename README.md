@@ -1,4 +1,5 @@
 [![Master Build Status](https://travis-ci.com/snowe2010/axon-kotlin.svg?branch=master)](https://travis-ci.com/snowe2010/axon-kotlin)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.tylerthrailkill/axon-kotlin-text/badge.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/com.tylerthrailkill/axon-kotlin-test)
 
 # axon-kotlin
 Extensions to the Axon Framework 
