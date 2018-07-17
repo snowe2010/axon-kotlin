@@ -1,4 +1,5 @@
 apply plugin: "org.jetbrains.dokka"
+apply plugin: "nebula.maven-publish"
 
 javadoc.enabled = false
 

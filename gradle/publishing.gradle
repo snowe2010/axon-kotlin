@@ -1,8 +1,8 @@
 apply plugin: 'nebula.release'
-apply plugin: 'nebula.contacts-base'
-apply plugin: 'contacts-pom'
+apply plugin: 'nebula.contacts'
 apply plugin: 'nebula.maven-publish'
 apply plugin: 'nebula.source-jar'
+apply plugin: "nebula.nebula-bintray-publishing"
 
 contacts {
     "tyler.b.thrailkill@gmail.com" {

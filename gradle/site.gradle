@@ -1,3 +1,6 @@
+apply plugin: "org.jbake.site"
+apply plugin: "org.ajoberstar.github-pages"
+apply plugin: "org.jetbrains.dokka"
 
 dokka {
     inputs.files tasks.getByPath(":axon-kotlin-test:compileKotlin")
