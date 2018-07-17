@@ -10,6 +10,21 @@ Currently only covers test functions, but will eventually cover all of Axon.
 
 Also includes a DSL for easier writing FixtureConfiguration tests. 
 
+## Install
+### Maven
+```xml
+<dependency>
+    <groupId>com.tylerthrailkill</groupId>
+    <artifactId>axon-kotlin-test</artifactId>
+    <version>${axon-kotlin.version}</version>
+</dependency>
+```
+
+### Gradle
+```groovy
+compile "com.tylerthrailkill:axon-kotlin-test:$axonKotlinVersion"
+```
+
 ## Extensions
 
 ## TODO
@@ -23,3 +38,4 @@ Also includes a DSL for easier writing FixtureConfiguration tests.
   variable, then you should be able to invoke a new block on it and continue using the dsl
 
 ### Extensions
+
