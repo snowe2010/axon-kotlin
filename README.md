@@ -1,5 +1,5 @@
-[![Master Build Status](https://travis-ci.com/snowe2010/axon-kotlin.svg?branch=master)](https://travis-ci.com/snowe2010/axon-kotlin)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.tylerthrailkill/axon-kotlin-text/badge.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/com.tylerthrailkill/axon-kotlin-test)
+[![Travis branch](https://img.shields.io/travis/snowe2010/axon-kotlin/master.svg?style=flat-square)](https://travis-ci.com/snowe2010/axon-kotlin)
+![Maven Central](https://img.shields.io/maven-central/v/com.tylerthrailkill/axon-kotlin-test.svg?style=flat-square)
 
 # axon-kotlin
 Extensions to the Axon Framework 
@@ -10,7 +10,12 @@ Currently only covers test functions, but will eventually cover all of Axon.
 
 Also includes a DSL for easier writing FixtureConfiguration tests. 
 
+## Documentation
+
+Docs are available at [https://snowe2010.github.io/axon-kotlin/axon-kotlin/](https://snowe2010.github.io/axon-kotlin/axon-kotlin/)
+
 ## Install
+
 ### Maven
 ```xml
 <dependency>
@@ -28,7 +33,6 @@ compile "com.tylerthrailkill:axon-kotlin-test:$axonKotlinVersion"
 ## Extensions
 
 ## TODO
-
 
 ### DSL 
 
