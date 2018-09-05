@@ -30,8 +30,8 @@ publishing {
 bintray {
     user = findProperty('bintrayUser') ?: System.getenv('BINTRAY_USER')
     key = findProperty('bintrayKey') ?: System.getenv('BINTRAY_KEY')
-    mavenCentralUser = findProperty('mavenCentralUser') ?: System.getenv('SONATYPE_USER')
-    mavenCentralKey = findProperty('mavenCentralKey') ?: System.getenv('SONATYPE_PASSWORD')
+    def mavenCentralUser = findProperty('mavenCentralUser') ?: System.getenv('SONATYPE_USER')
+    def mavenCentralPassword = findProperty('mavenCentralKey') ?: System.getenv('SONATYPE_PASSWORD')
     override = true
 
     pkg {
