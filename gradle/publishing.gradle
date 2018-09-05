@@ -30,6 +30,8 @@ publishing {
 bintray {
     user = findProperty('bintrayUser') ?: System.getenv('BINTRAY_USER')
     key = findProperty('bintrayKey') ?: System.getenv('BINTRAY_KEY')
+    mavenCentralUser = findProperty('mavenCentralUser') ?: System.getenv('SONATYPE_USER')
+    mavenCentralKey = findProperty('mavenCentralKey') ?: System.getenv('SONATYPE_PASSWORD')
     override = true
 
     pkg {
@@ -46,7 +48,12 @@ bintray {
         version {
             gpg {
                 sign = true
-                passphrase = findProperty('gpgPassphrase') ?: System.getenv('GPG_PASSPHRASE')
+            }
+            mavenCentralSync {
+                sync = true
+                user = mavenCentralUser
+                password = mavenCentralPassword
+                close = "1"
             }
         }
     }
